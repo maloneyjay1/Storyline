@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E62B2F481BFE91B400C81B9C /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F471BFE91B400C81B9C /* Story.swift */; };
+		E62B2F4A1BFE91BE00C81B9C /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F491BFE91BE00C81B9C /* Entry.swift */; };
+		E62B2F4C1BFE91CA00C81B9C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F4B1BFE91CA00C81B9C /* User.swift */; };
+		E62B2F4E1BFE91D300C81B9C /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F4D1BFE91D300C81B9C /* Like.swift */; };
+		E62B2F511BFE94E000C81B9C /* FirebaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F501BFE94E000C81B9C /* FirebaseController.swift */; };
+		E62B2F531BFEA17400C81B9C /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F521BFEA17300C81B9C /* Firebase.framework */; };
+		E62B2F561BFEA23B00C81B9C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F551BFEA23B00C81B9C /* Security.framework */; };
+		E62B2F581BFEA24900C81B9C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F571BFEA24900C81B9C /* CFNetwork.framework */; };
+		E62B2F5A1BFEA27B00C81B9C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F591BFEA27B00C81B9C /* libc++.tbd */; };
+		E62B2F5C1BFEA28400C81B9C /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F5B1BFEA28400C81B9C /* libicucore.tbd */; };
+		E62B2F5E1BFEA34600C81B9C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F5D1BFEA34600C81B9C /* SystemConfiguration.framework */; };
+		E62B2F641C051E0300C81B9C /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F631C051E0300C81B9C /* UserController.swift */; };
 		E6CA212B1BFA86EA00E4FCFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CA212A1BFA86EA00E4FCFF /* AppDelegate.swift */; };
 		E6CA212D1BFA86EA00E4FCFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CA212C1BFA86EA00E4FCFF /* ViewController.swift */; };
 		E6CA21301BFA86EB00E4FCFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6CA212E1BFA86EB00E4FCFF /* Main.storyboard */; };
@@ -35,6 +47,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E62B2F471BFE91B400C81B9C /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
+		E62B2F491BFE91BE00C81B9C /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		E62B2F4B1BFE91CA00C81B9C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E62B2F4D1BFE91D300C81B9C /* Like.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
+		E62B2F501BFE94E000C81B9C /* FirebaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseController.swift; sourceTree = "<group>"; };
+		E62B2F521BFEA17300C81B9C /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Firebase.framework; sourceTree = "<group>"; };
+		E62B2F551BFEA23B00C81B9C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		E62B2F571BFEA24900C81B9C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		E62B2F591BFEA27B00C81B9C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		E62B2F5B1BFEA28400C81B9C /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		E62B2F5D1BFEA34600C81B9C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		E62B2F631C051E0300C81B9C /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
 		E6CA21271BFA86EA00E4FCFF /* storyLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = storyLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6CA212A1BFA86EA00E4FCFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E6CA212C1BFA86EA00E4FCFF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +80,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E62B2F5E1BFEA34600C81B9C /* SystemConfiguration.framework in Frameworks */,
+				E62B2F5C1BFEA28400C81B9C /* libicucore.tbd in Frameworks */,
+				E62B2F5A1BFEA27B00C81B9C /* libc++.tbd in Frameworks */,
+				E62B2F581BFEA24900C81B9C /* CFNetwork.framework in Frameworks */,
+				E62B2F561BFEA23B00C81B9C /* Security.framework in Frameworks */,
+				E62B2F531BFEA17400C81B9C /* Firebase.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,9 +106,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E62B2F461BFE919100C81B9C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E62B2F471BFE91B400C81B9C /* Story.swift */,
+				E62B2F491BFE91BE00C81B9C /* Entry.swift */,
+				E62B2F4B1BFE91CA00C81B9C /* User.swift */,
+				E62B2F4D1BFE91D300C81B9C /* Like.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		E62B2F4F1BFE91D900C81B9C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E62B2F501BFE94E000C81B9C /* FirebaseController.swift */,
+				E62B2F631C051E0300C81B9C /* UserController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		E62B2F541BFEA18A00C81B9C /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				E62B2F5B1BFEA28400C81B9C /* libicucore.tbd */,
+				E62B2F591BFEA27B00C81B9C /* libc++.tbd */,
+				E62B2F571BFEA24900C81B9C /* CFNetwork.framework */,
+				E62B2F5D1BFEA34600C81B9C /* SystemConfiguration.framework */,
+				E62B2F551BFEA23B00C81B9C /* Security.framework */,
+				E62B2F521BFEA17300C81B9C /* Firebase.framework */,
+			);
+			name = Firebase;
+			sourceTree = "<group>";
+		};
 		E6CA211E1BFA86E900E4FCFF = {
 			isa = PBXGroup;
 			children = (
+				E62B2F541BFEA18A00C81B9C /* Firebase */,
+				E62B2F4F1BFE91D900C81B9C /* Controllers */,
+				E62B2F461BFE919100C81B9C /* Models */,
 				E6CA21291BFA86EA00E4FCFF /* storyLine */,
 				E6CA21411BFA86EB00E4FCFF /* storyLineTests */,
 				E6CA214C1BFA86EB00E4FCFF /* storyLineUITests */,
@@ -262,9 +328,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E62B2F641C051E0300C81B9C /* UserController.swift in Sources */,
+				E62B2F511BFE94E000C81B9C /* FirebaseController.swift in Sources */,
+				E62B2F4A1BFE91BE00C81B9C /* Entry.swift in Sources */,
+				E62B2F4E1BFE91D300C81B9C /* Like.swift in Sources */,
 				E6CA212D1BFA86EA00E4FCFF /* ViewController.swift in Sources */,
+				E62B2F4C1BFE91CA00C81B9C /* User.swift in Sources */,
 				E6CA21331BFA86EB00E4FCFF /* storyLine.xcdatamodeld in Sources */,
 				E6CA212B1BFA86EA00E4FCFF /* AppDelegate.swift in Sources */,
+				E62B2F481BFE91B400C81B9C /* Story.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +476,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = storyLine/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = myApp.storyLine;
@@ -415,6 +491,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = storyLine/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = myApp.storyLine;
@@ -489,6 +569,7 @@
 				E6CA21541BFA86EB00E4FCFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E6CA21551BFA86EB00E4FCFF /* Build configuration list for PBXNativeTarget "storyLineTests" */ = {
 			isa = XCConfigurationList;
@@ -497,6 +578,7 @@
 				E6CA21571BFA86EB00E4FCFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E6CA21581BFA86EB00E4FCFF /* Build configuration list for PBXNativeTarget "storyLineUITests" */ = {
 			isa = XCConfigurationList;
@@ -505,6 +587,7 @@
 				E6CA215A1BFA86EB00E4FCFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
