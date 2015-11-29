@@ -19,6 +19,8 @@
 		E62B2F5C1BFEA28400C81B9C /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F5B1BFEA28400C81B9C /* libicucore.tbd */; };
 		E62B2F5E1BFEA34600C81B9C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E62B2F5D1BFEA34600C81B9C /* SystemConfiguration.framework */; };
 		E62B2F641C051E0300C81B9C /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F631C051E0300C81B9C /* UserController.swift */; };
+		E62B2F661C0653FB00C81B9C /* EntryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F651C0653FB00C81B9C /* EntryController.swift */; };
+		E62B2F681C06540B00C81B9C /* StoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B2F671C06540B00C81B9C /* StoryController.swift */; };
 		E6CA212B1BFA86EA00E4FCFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CA212A1BFA86EA00E4FCFF /* AppDelegate.swift */; };
 		E6CA212D1BFA86EA00E4FCFF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CA212C1BFA86EA00E4FCFF /* ViewController.swift */; };
 		E6CA21301BFA86EB00E4FCFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6CA212E1BFA86EB00E4FCFF /* Main.storyboard */; };
@@ -59,6 +61,8 @@
 		E62B2F5B1BFEA28400C81B9C /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		E62B2F5D1BFEA34600C81B9C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		E62B2F631C051E0300C81B9C /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
+		E62B2F651C0653FB00C81B9C /* EntryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryController.swift; sourceTree = "<group>"; };
+		E62B2F671C06540B00C81B9C /* StoryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryController.swift; sourceTree = "<group>"; };
 		E6CA21271BFA86EA00E4FCFF /* storyLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = storyLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6CA212A1BFA86EA00E4FCFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E6CA212C1BFA86EA00E4FCFF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -122,6 +126,8 @@
 			children = (
 				E62B2F501BFE94E000C81B9C /* FirebaseController.swift */,
 				E62B2F631C051E0300C81B9C /* UserController.swift */,
+				E62B2F651C0653FB00C81B9C /* EntryController.swift */,
+				E62B2F671C06540B00C81B9C /* StoryController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -139,12 +145,20 @@
 			name = Firebase;
 			sourceTree = "<group>";
 		};
+		E62B2F6B1C06544600C81B9C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		E6CA211E1BFA86E900E4FCFF = {
 			isa = PBXGroup;
 			children = (
 				E62B2F541BFEA18A00C81B9C /* Firebase */,
 				E62B2F4F1BFE91D900C81B9C /* Controllers */,
 				E62B2F461BFE919100C81B9C /* Models */,
+				E62B2F6B1C06544600C81B9C /* Views */,
 				E6CA21291BFA86EA00E4FCFF /* storyLine */,
 				E6CA21411BFA86EB00E4FCFF /* storyLineTests */,
 				E6CA214C1BFA86EB00E4FCFF /* storyLineUITests */,
@@ -330,6 +344,8 @@
 			files = (
 				E62B2F641C051E0300C81B9C /* UserController.swift in Sources */,
 				E62B2F511BFE94E000C81B9C /* FirebaseController.swift in Sources */,
+				E62B2F681C06540B00C81B9C /* StoryController.swift in Sources */,
+				E62B2F661C0653FB00C81B9C /* EntryController.swift in Sources */,
 				E62B2F4A1BFE91BE00C81B9C /* Entry.swift in Sources */,
 				E62B2F4E1BFE91D300C81B9C /* Like.swift in Sources */,
 				E6CA212D1BFA86EA00E4FCFF /* ViewController.swift in Sources */,

@@ -4,7 +4,7 @@
 //
 //  Created by Jay Maloney on 11/19/15.
 //  Copyright © 2015 Jay Maloney. All rights reserved.
-//
+
 
 import Foundation
 
@@ -16,11 +16,11 @@ struct Story: Equatable, FirebaseType {
     private let DateCreatedKey = "dateCreated"
     private let identiferKey = "identifier"
     
-    let entries: [Entry]
-    let dateCreated: Double?
-    var identifier: String?
+    let entries: [String] 
+    let dateCreated: NSDate
+    var identifier: String
     
-    init(entries: [Entry] = [], dateCreated: Double? = nil, identifier: String? = nil) {
+    init(entries: [String], dateCreated: NSDate, identifier: String) {
         
 
         self.entries = entries
@@ -34,14 +34,9 @@ struct Story: Equatable, FirebaseType {
     var endpoint: String = "story"
     
     var jsonValue: [String: AnyObject] {
-        
-        var json: [String: AnyObject] = [EntriesKey: AnyObject] 
-        
-        if let dateCreated = self.dateCreated {
-            json.updateValue(dateCreated, forKey: DateCreatedKey)
-        }
-
-        return json
+        let dateCreatedString = String(dateCreated)
+        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, identiferKey:identifier, EntriesKey: entries]
+                return json
     }
     
     init?(json: [String: AnyObject], identifier: String?) {
@@ -53,9 +48,23 @@ struct Story: Equatable, FirebaseType {
             return nil
         }
         
-        self.entries = (json[EntriesKey] as? [Entry])!
-        self.dateCreated = json[DateCreatedKey] as? Double
+        if let entries = json[EntriesKey] as? [String] {
+            self.entries = entries
+        } else{
+            print("ERROR no [String] in json[EntriesKey]")
+        }
+        
+        if let dateAsString = json[DateCreatedKey] as? String {
+            
+            let dateFormatter = NSDateFormatter()
+            let date = dateFormatter.dateFromString(dateAsString)
+            if let nsDate = date {
+                self.dateCreated = nsDate
+            }
+        }
+        
         self.identifier = identifier
+        return nil
 
     }
 }

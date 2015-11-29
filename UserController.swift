@@ -107,11 +107,11 @@ class UserController {
     
     static func updateUser(user: User, name: String, url: String?, email: String?, password: String?, completion: (success: Bool, user: User?) -> Void) {
         
-        var updatedUser = User(id: user.id, uid: user.identifier!, name: user.name!, email: user.email, password: user.password)
+        var updatedUser = User(id: user.id, uid: user.identifier, name: user.name!, email: user.email, password: user.password)
         
         updatedUser.save()
         
-        UserController.userForIdentifier(user.identifier!) { (user) -> Void in
+        UserController.userForIdentifier(user.identifier) { (user) -> Void in
             
             if let user = user {
                 

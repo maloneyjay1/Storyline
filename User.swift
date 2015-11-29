@@ -22,7 +22,7 @@ struct User: Equatable, FirebaseType {
     let name: String?
     var email: String?
     var password: String?
-    var identifier: String?
+    var identifier: String
     
     init(id: String, uid: String, name: String? = nil, email: String? = nil, password: String? = nil) {
         
@@ -70,7 +70,7 @@ struct User: Equatable, FirebaseType {
         self.name = json[NameKey] as? String
         self.email = json[EmailKey] as? String
         self.password = json[PasswordKey] as? String
-        self.identifier = identifier
+        self.identifier = identifier!
         
     }
 }

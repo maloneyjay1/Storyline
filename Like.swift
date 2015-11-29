@@ -15,13 +15,13 @@ struct Like: Equatable, FirebaseType {
     
     let name: String
     let entryIdentifier: String
-    var identifier: String?
+    var identifier: String
     
     init(name: String, entryIdentifier: String, identifier: String? = nil) {
         
         self.name = name
         self.entryIdentifier = entryIdentifier
-        self.identifier = identifier
+        self.identifier = identifier!
     }
     
     // MARK: FirebaseType
@@ -50,7 +50,7 @@ struct Like: Equatable, FirebaseType {
         
         self.entryIdentifier = postIdentifier
         self.name = name
-        self.identifier = identifier
+        self.identifier = identifier!
     }
 }
 
