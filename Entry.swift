@@ -54,7 +54,7 @@ struct Entry: Equatable, FirebaseType {
     init?(json: [String: AnyObject], identifier: String?) {
         
         //if json can store a property as? this type
-        guard let name = json[nameKey] as? String,
+        guard let name = json[name] as? String,
             let identifier = json[identiferKey] as? String,
             let text = json[TextKey] as? String,
             let likeDictionaries = json[likesKey] as? [String:AnyObject],
@@ -78,7 +78,6 @@ struct Entry: Equatable, FirebaseType {
         self.identifier = identifier
         self.postedInMain = postedInMain
         self.likes = likeDictionaries.flatMap({Like(json: $0.1 as! [String : AnyObject], identifier: $0.0)})
-        
         self.dateCreated = NSDate()
         
         let dateFormatter = NSDateFormatter()
@@ -87,18 +86,26 @@ struct Entry: Equatable, FirebaseType {
             self.dateCreated = nsDate
         }
         
-        
-        //        if let likeDictionaries = json[likesKey] as? [String: AnyObject] {
-        //            self.likes = likeDictionaries.flatMap({Like(json: $0.1 as! [String : AnyObject], identifier: $0.0)})
-        //        } else {
-        //            print("ERROR no [Like] in json[likesKey]")
-        //            self.likes = []
-        //        }
     }
     
+    func dictionaryOfEntry() -> [String:AnyObject] {
+
+        return [TextKey: self.text,
+            PostedInMainKey: self.postedInMain!,
+            identiferKey: self.identifier,
+            likesKey: self.likes,
+            DateCreatedKey: self.dateCreated,
+            nameKey: self.name,
+        ]
+    }
 }
+
 
 func ==(lhs:Entry, rhs:Entry) -> Bool {
     
     return (lhs.name == rhs.name) && (lhs.identifier == rhs.identifier)
+    
 }
+
+
+

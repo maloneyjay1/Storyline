@@ -12,6 +12,7 @@ import UIKit
 
 class EntryController {
     
+    
     static func fetchEntryForUser(user: User, completion: (entries: [Entry]?) -> Void) {
         
         var allEntries: [Entry] = []
@@ -22,6 +23,18 @@ class EntryController {
         
         entriesForUser(UserController.sharedController.currentUser.name!, completion:
             { (entries) -> Void in
+                
+                if let entries = entries {
+                    allEntries += entries
+                }
+                
+                dispatch_group_leave(dispatchGroup)
+        })
+        
+        
+        dispatch_group_enter(dispatchGroup)
+        
+        entriesForUser(user.name!, completion: { (entries) -> Void in
             
             if let entries = entries {
                 allEntries += entries
@@ -31,26 +44,15 @@ class EntryController {
         })
         
         
-            dispatch_group_enter(dispatchGroup)
-            
-            entriesForUser(user.name!, completion: { (entries) -> Void in
-                
-                if let entries = entries {
-                    allEntries += entries
-                }
-                
-                dispatch_group_leave(dispatchGroup)
-            })
-        
-        
         dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), { () -> Void in
             
             let orderedEntries = orderEntries(allEntries)
             
             completion(entries: orderedEntries)
         })
-
+        
     }
+    
     
     static func addEntry(identifier: String?, name: String = UserController.sharedController.currentUser.name!, postedInMain: Bool, text: String?, dateCreated: NSDate, completion: (entry: Entry?) -> Void) {
         
@@ -77,9 +79,18 @@ class EntryController {
         }
     }
     
+    
+    static func appendEntryToMainStory(entry:Entry, completion: (entry: Entry?) -> Void) {
+        
+        StoryController.sharedController.currentStory.entries.append(entry.dictionaryOfEntry())
+        StoryController.sharedController.currentStory.save()
+        completion(entry:entry)
+        
+    }
+    
+    
     static func entriesForUser(name: String, completion: (entries: [Entry]?) -> Void) {
         FirebaseController.base.childByAppendingPath("entries").queryOrderedByChild("name").queryEqualToValue(name).observeSingleEventOfType(.Value, withBlock: { snapshot in
-            
             
             if let entryDictionaries = snapshot.value as? [String: AnyObject] {
                 
@@ -94,8 +105,8 @@ class EntryController {
                 completion(entries: nil)
             }
         })
-        
     }
+    
     
     static func deleteEntry(entry: Entry, completion: (success: Bool) -> Void) {
         
@@ -104,38 +115,6 @@ class EntryController {
         completion(success: true)
     }
     
-//    static func addCommentWithTextToEntry(text: String, entry: Entry, completion: (success: Bool, entry: Entry?) -> Void?) {
-//        
-//        if let entryIdentifier = entry.identifier {
-//            
-//            var comment = Comment(username: UserController.sharedController.currentUser.username, text: text, postIdentifier: postIdentifier)
-//            comment.save()
-//            
-//            PostController.postFromIdentifier(comment.postIdentifier) { (post) -> Void in
-//                completion(success: true, post: post)
-//            }
-//        } else {
-//            
-//            var post = post
-//            post.save()
-//            var comment = Comment(username: UserController.sharedController.currentUser.username, text: text, postIdentifier: post.identifier!)
-//            comment.save()
-//            
-//            PostController.postFromIdentifier(comment.postIdentifier) { (post) -> Void in
-//                completion(success: true, post: post)
-//            }
-//        }
-//    }
-    
-//    static func deleteComment(comment: Comment, completion: (success: Bool, post: Post?) -> Void) {
-//        
-//        comment.delete()
-//        
-//        PostController.postFromIdentifier(comment.postIdentifier) { (post) -> Void in
-//            completion(success: true, post: post)
-//        }
-//    }
-
     
     static func addLikeToEntry(entry: Entry, completion: (success: Bool, entry: Entry?) -> Void) {
         
@@ -149,6 +128,7 @@ class EntryController {
         })
     }
     
+    
     static func deleteLike(like: Like, completion: (success: Bool, entry: Entry?) -> Void) {
         
         like.delete()
@@ -158,11 +138,13 @@ class EntryController {
         }
     }
     
+    
     static func orderEntries(entries: [Entry]) -> [Entry] {
         
         // sorts posts chronologically using Firebase identifiers
         return entries.sort({$0.0.identifier > $0.1.identifier})
     }
+    
     
     static func mockEntries() -> [Entry] {
         
@@ -172,15 +154,12 @@ class EntryController {
         
         let entry1 = Entry(identifier: "145", name: "Jay", postedInMain: true, text: "This is a sweet entry", dateCreated: NSDate(), likes: [like1,like2,like3])
         let entry2 = Entry(identifier: "14355", name: "Bob", postedInMain: true, text: "This is another sweet entry", dateCreated: NSDate(), likes: [like1,like2,like3])
-        let entry3 = Entry(identifier: "18445", name: "Jeebus", postedInMain: false, text: "This is yet another sweet entry", dateCreated: NSDate(), likes: [like1,like2,like3])
+        let entry3 = Entry(identifier: "18445", name: "Jeeves", postedInMain: false, text: "This is yet another sweet entry", dateCreated: NSDate(), likes: [like1,like2,like3])
         
         return [entry1, entry2, entry3]
+        
     }
     
     
 }
-
-
-
-
 

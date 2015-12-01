@@ -14,18 +14,22 @@ struct Story: Equatable, FirebaseType {
     private let IDKey = "id"
     private let EntriesKey = "entries"
     private let DateCreatedKey = "dateCreated"
-    private let identiferKey = "identifier"
+    private let identifierKey = "identifier"
+    private let StoryPromptKey = "storyPrompt"
     
-    let entries: [String] 
+    
+    var entries: [[String:AnyObject]]
     let dateCreated: NSDate
     var identifier: String
+    var storyPrompt: String
     
-    init(entries: [String], dateCreated: NSDate, identifier: String) {
+    init(entries: [[String:AnyObject]], dateCreated: NSDate, identifier: String, storyPrompt: String) {
         
 
         self.entries = entries
         self.dateCreated = dateCreated
         self.identifier = identifier
+        self.storyPrompt = storyPrompt
         
     }
     
@@ -35,20 +39,20 @@ struct Story: Equatable, FirebaseType {
     
     var jsonValue: [String: AnyObject] {
         let dateCreatedString = String(dateCreated)
-        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, identiferKey:identifier, EntriesKey: entries]
+        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, identifierKey:identifier, EntriesKey: entries, StoryPromptKey: storyPrompt]
                 return json
     }
     
     init?(json: [String: AnyObject], identifier: String?) {
         
-        guard let identifier = json[identiferKey] as? String else {
+        guard let identifier = json[identifierKey] as? String else {
             
             self.identifier = ""
 
             return nil
         }
         
-        if let entries = json[EntriesKey] as? [String] {
+        if let entries = json[EntriesKey] as? [[String:AnyObject]] {
             self.entries = entries
         } else{
             print("ERROR no [String] in json[EntriesKey]")
@@ -61,6 +65,12 @@ struct Story: Equatable, FirebaseType {
             if let nsDate = date {
                 self.dateCreated = nsDate
             }
+        }
+        
+        if let storyPrompt = json[StoryPromptKey] as? String {
+            
+            self.storyPrompt = storyPrompt
+            return nil
         }
         
         self.identifier = identifier

@@ -9,19 +9,11 @@
 import Foundation
 import UIKit
 
-//    let entries: [String]
-//    let dateCreated: NSDate
-//    var identifier: String
 
-// what do i need to do in my story controller?
-
-// create story (instantiate entry collection, and add initial entry with plot),
 // add entry to story,
 //remove entry from story,
-//save story,
 //update story
-//delete story
-//return users for current story (entries),
+
 
 class StoryController {
     
@@ -71,31 +63,36 @@ class StoryController {
         })
     }
     
-    //    let entries: [String]
-    //    let dateCreated: NSDate
-    //    var identifier: String
-    //      when addStory is called, I want a story object to be created and saved with a default entry that holds the main story "plot"
-    
-    static func addStory(identifier: String, entries: [String], initialEntry: Entry, dateCreated: NSDate, completion: (story:Story?) -> Void) {
+
+    static func addStory(identifier: String, entries: [[String:AnyObject]], storydateCreated: NSDate, storyPrompt: String, completion: (story:Story?) -> Void) {
         
-        var newEntry = Entry(identifier: String, name: String() = UserController.sharedController.currentUser.name!, postedInMain: Bool, text: String?, dateCreated: NSDate, likes: [])
+        var story = Story(entries: entries, dateCreated: NSDate(), identifier: NSUUID().UUIDString,storyPrompt: "")
         
-        var story = Story(entries: entries, dateCreated: dateCreated, identifier: identifier)
         story.save()
         completion(story: story)
         
     }
     
-    //    static func addEntry(identifier: String?, name: String = UserController.sharedController.currentUser.name!, postedInMain: Bool, text: String?, dateCreated: NSDate, completion: (entry: Entry?) -> Void) {
-    //
-    //        if let identifier = identifier {
-    //            var entry = Entry(identifier: identifier, name: name, postedInMain: postedInMain, text: text, dateCreated: dateCreated, likes: [])
-    //            entry.save()
-    //            completion(entry: entry)
-    //        } else {
-    //            completion(entry: nil)
-    //        }
-    //    }
+    
+    //NEED UPDATE METHOD
+    //static func updateMainStoryEntry
+    
+    
+    static func deleteStory(story: Story, completion: (success: Bool) -> Void) {
+        
+        story.delete()
+        
+        completion(success: true)
+    }
+    
+    
+    static func saveStory(var story: Story, completion: (success: Bool) -> Void) {
+        
+        story.save()
+        
+        completion(success: true)
+    }
+
     
     static func fetchUsersForStory(story: Story, completion: (users: [User]?) -> Void) {
         
