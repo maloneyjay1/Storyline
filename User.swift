@@ -57,7 +57,7 @@ struct User: Equatable, FirebaseType {
         return json
     }
     
-    init?(json: [String: AnyObject], identifier: String?) {
+    init?(json: [String: AnyObject], identifier: String) {
         
         guard let id = json[IDKey] as? String else {
             
@@ -70,7 +70,7 @@ struct User: Equatable, FirebaseType {
         self.name = json[NameKey] as? String
         self.email = json[EmailKey] as? String
         self.password = json[PasswordKey] as? String
-        self.identifier = identifier!
+        self.identifier = identifier
         
     }
 }

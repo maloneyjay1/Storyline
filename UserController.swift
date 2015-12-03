@@ -88,29 +88,66 @@ class UserController {
         }
     }
     
-    static func createUser(email: String, name: String, password: String, url: String?, completion: (success: Bool, user: User?) -> Void) {
+//    static func addLikeToEntry(entry: Entry, completion: (success: Bool, entry: Entry?) -> Void) {
+//        
+//        let entryID = entry.identifier
+//        //entry.save()
+//        let likesRef = FirebaseController.base.childByAppendingPath("/likes/")
+//        let newLikeRef = likesRef.childByAutoId()
+//        let likesRefIdentifier = newLikeRef.key
+//        let like = Like(name: UserController.sharedController.currentUser.identifier, entryIdentifier: entryID, identifier: likesRefIdentifier)
+//        //MARK: where to get identifier?
+//        let likeJson = like.dictionaryOfLike()
+//        FirebaseController.base.childByAppendingPath("/likes/\(likesRefIdentifier)").updateChildValues(likeJson)
+//        
+//        EntryController.entryFromIdentifier(entry.identifier, completion: { (post) -> Void in
+//            completion(success: true, entry: entry)
+//        })
+//    }
+
+
+    static func createUser(email: String, name: String, password: String, url: String?, completion: (success: Bool) -> Void) {
+        
+//        let userURLRef = FirebaseController.base.childByAppendingPath("/users/")
+//        let newUserRef = userURLRef.childByAutoId()
+//        let userRefIdentifier = newUserRef.key
         
         FirebaseController.base.createUser(email, password: password) { (error, response) -> Void in
+            
+            let dispatchGroup = dispatch_group_create()
+            
+            dispatch_group_enter(dispatchGroup)
             
             if let uid = response["uid"] as? String {
                 var user = User(id: name, uid: uid, name: url)
                 user.save()
                 
+                print("\(user) created.")
+                
                 authenticateUser(email, password: password, completion: { (success, user) -> Void in
-                    completion(success: success, user: user)
+                    completion(success: success)
                 })
             }
+            
+            dispatch_group_leave(dispatchGroup)
+    
         }
+    
+        completion(success: true)
         
-        completion(success: true, user: mockUsers().first)
+
     }
     
     static func updateUser(user: User, name: String, url: String?, email: String?, password: String?, completion: (success: Bool, user: User?) -> Void) {
         
+        let dispatchGroup = dispatch_group_create()
+        
+        dispatch_group_enter(dispatchGroup)
+        
         var updatedUser = User(id: user.id, uid: user.identifier, name: user.name!, email: user.email, password: user.password)
         
         updatedUser.save()
-        
+        print("\(updatedUser) updated.")
         UserController.userForIdentifier(user.identifier) { (user) -> Void in
             
             if let user = user {
@@ -120,6 +157,8 @@ class UserController {
             
             completion(success: true, user: user)
         }
+        
+        dispatch_group_leave(dispatchGroup)
     }
     
     static func logoutCurrentUser() {

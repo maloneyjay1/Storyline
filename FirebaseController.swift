@@ -49,7 +49,7 @@ protocol FirebaseType {
     var jsonValue: [String: AnyObject] { get }
     
 
-    init?(json: [String: AnyObject], identifier: String?)
+    init?(json: [String: AnyObject], identifier: String)
 
     mutating func save()
     func delete()
@@ -61,12 +61,8 @@ extension FirebaseType {
         
         var endpointBase: Firebase
         
-        if let childID = self.identifier {
-            endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAppendingPath(childID)
-        } else {
-            endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAutoId()
-            self.identifier = endpointBase.key
-        }
+        endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAutoId()
+        self.identifier = endpointBase.key
         
         endpointBase.updateChildValues(self.jsonValue)
         

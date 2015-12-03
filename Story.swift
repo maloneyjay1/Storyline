@@ -43,7 +43,7 @@ struct Story: Equatable, FirebaseType {
                 return json
     }
     
-    init?(json: [String: AnyObject], identifier: String?) {
+    init?(json: [String: AnyObject], identifier: String) {
         
         guard let identifier = json[identifierKey] as? String else {
             

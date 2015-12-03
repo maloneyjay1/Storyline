@@ -9,11 +9,8 @@
 import Foundation
 import UIKit
 
-
-// add entry to story,
 //remove entry from story,
 //update story
-
 
 class StoryController {
     
@@ -66,7 +63,7 @@ class StoryController {
 
     static func addStory(identifier: String, entries: [[String:AnyObject]], storydateCreated: NSDate, storyPrompt: String, completion: (story:Story?) -> Void) {
         
-        var story = Story(entries: entries, dateCreated: NSDate(), identifier: NSUUID().UUIDString,storyPrompt: "")
+        var story = Story(entries: entries, dateCreated: NSDate(), identifier: NSUUID().UUIDString, storyPrompt: "")
         
         story.save()
         completion(story: story)

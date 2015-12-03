@@ -11,17 +11,20 @@ import Foundation
 struct Like: Equatable, FirebaseType {
     
     private let UserKey = "username"
-    private let PostKey = "post"
+    private let EntryKey = "entry"
+    private let NameKey = "name"
+    private let EntryIdentifierKey = "entryIdentifier"
+    private let IdentifierKey = "identifier"
     
     let name: String
     let entryIdentifier: String
     var identifier: String
     
-    init(name: String, entryIdentifier: String, identifier: String? = nil) {
+    init(name: String, entryIdentifier: String, identifier: String) {
         
         self.name = name
         self.entryIdentifier = entryIdentifier
-        self.identifier = identifier!
+        self.identifier = identifier
     }
     
     // MARK: FirebaseType
@@ -29,16 +32,17 @@ struct Like: Equatable, FirebaseType {
     var endpoint: String {
         
         return "/posts/\(self.entryIdentifier)/likes/"
+        
     }
     
     var jsonValue: [String: AnyObject] {
         
-        return [UserKey: self.name, PostKey: self.entryIdentifier]
+        return [UserKey: self.name, EntryKey: self.entryIdentifier]
     }
     
-    init?(json: [String: AnyObject], identifier: String?) {
+    init?(json: [String: AnyObject], identifier: String) {
         
-        guard let postIdentifier = json[PostKey] as? String,
+        guard let postIdentifier = json[EntryKey] as? String,
             let name = json[UserKey] as? String else {
                 
                 self.identifier = ""
@@ -50,7 +54,15 @@ struct Like: Equatable, FirebaseType {
         
         self.entryIdentifier = postIdentifier
         self.name = name
-        self.identifier = identifier!
+        self.identifier = identifier
+    }
+    
+    func dictionaryOfLike() -> [String:AnyObject] {
+        
+        return [NameKey: self.name,
+            EntryIdentifierKey: self.entryIdentifier,
+            IdentifierKey: self.identifier
+        ]
     }
 }
 
