@@ -13,13 +13,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UserController.createUser("vader@empire.gov", name: "Darth Vader", id: "1234", password: "obiSucks101", url: "randomURL") { (success) -> Void in
+        
+        UserController.authenticateUser("vader@empire.gov", password: "obiSucks101") { (success, user) -> Void in
+            print("\(success, user)")
         }
         
-//        EntryController.addEntry("Identifier", name: "-K4_7B3WGQGya2DJ4H3t", postedInMain: false, text: "Text", dateCreated: NSDate()) { (identifier) -> Void in
-//            
-//        }
-        
+
     }
 
     override func didReceiveMemoryWarning() {

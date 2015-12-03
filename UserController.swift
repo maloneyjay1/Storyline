@@ -38,6 +38,7 @@ class UserController {
         }
     }
     
+    //test successful
     static func userForIdentifier(identifier: String, completion: (user: User?) -> Void) {
         
         FirebaseController.dataAtEndpoint("users/\(identifier)") { (data) -> Void in
@@ -51,6 +52,7 @@ class UserController {
         }
     }
     
+    //successful test
     static func fetchAllUsers(completion: (users: [User]) -> Void) {
         
         FirebaseController.dataAtEndpoint("users") { (data) -> Void in
@@ -64,6 +66,7 @@ class UserController {
             }
         }
     }
+    
     
     static func authenticateUser(email: String, password: String, completion: (success: Bool, user: User?) -> Void) {
         
@@ -88,7 +91,7 @@ class UserController {
         }
     }
     
-    
+    //successful test
     static func createUser(email: String, name: String, id: String, password: String, url: String?, completion: (success: Bool) -> Void) {
         
         FirebaseController.base.createUser(email, password: password) { (error, response) -> Void in
