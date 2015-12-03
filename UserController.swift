@@ -88,29 +88,8 @@ class UserController {
         }
     }
     
-//    static func addLikeToEntry(entry: Entry, completion: (success: Bool, entry: Entry?) -> Void) {
-//        
-//        let entryID = entry.identifier
-//        //entry.save()
-//        let likesRef = FirebaseController.base.childByAppendingPath("/likes/")
-//        let newLikeRef = likesRef.childByAutoId()
-//        let likesRefIdentifier = newLikeRef.key
-//        let like = Like(name: UserController.sharedController.currentUser.identifier, entryIdentifier: entryID, identifier: likesRefIdentifier)
-//        //MARK: where to get identifier?
-//        let likeJson = like.dictionaryOfLike()
-//        FirebaseController.base.childByAppendingPath("/likes/\(likesRefIdentifier)").updateChildValues(likeJson)
-//        
-//        EntryController.entryFromIdentifier(entry.identifier, completion: { (post) -> Void in
-//            completion(success: true, entry: entry)
-//        })
-//    }
-
-
-    static func createUser(email: String, name: String, password: String, url: String?, completion: (success: Bool) -> Void) {
-        
-//        let userURLRef = FirebaseController.base.childByAppendingPath("/users/")
-//        let newUserRef = userURLRef.childByAutoId()
-//        let userRefIdentifier = newUserRef.key
+    
+    static func createUser(email: String, name: String, id: String, password: String, url: String?, completion: (success: Bool) -> Void) {
         
         FirebaseController.base.createUser(email, password: password) { (error, response) -> Void in
             
@@ -118,9 +97,17 @@ class UserController {
             
             dispatch_group_enter(dispatchGroup)
             
-            if let uid = response["uid"] as? String {
-                var user = User(id: name, uid: uid, name: url)
+            if let id = response["id"] as? String {
+                
+                var user = User(id: name, uid: id, name: UserController.sharedController.currentUser.name, email: email, password: password)
                 user.save()
+                
+                //        let userURLRef = FirebaseController.base.childByAppendingPath("/users/")
+                //        let newUserRef = userURLRef.childByAutoId()
+                //        let userRefIdentifier = newUserRef.key
+                //        var user = User(id: userRefIdentifier, uid: uid, name: UserController.sharedController.currentUser.name, email: email, password: password)
+                //        let userJson = user.dictionaryOfUser
+                //        FirebaseController.base.childByAppendingPath("/users/\(userRefIdentifier)").updateChildValues(userJson)
                 
                 print("\(user) created.")
                 
@@ -130,12 +117,11 @@ class UserController {
             }
             
             dispatch_group_leave(dispatchGroup)
-    
+            
         }
-    
+        
         completion(success: true)
         
-
     }
     
     static func updateUser(user: User, name: String, url: String?, email: String?, password: String?, completion: (success: Bool, user: User?) -> Void) {

@@ -73,6 +73,16 @@ struct User: Equatable, FirebaseType {
         self.identifier = identifier
         
     }
+    
+    func dictionaryOfUser() -> [String:AnyObject] {
+        
+        return [IDKey: self.id,
+            NameKey: self.name!,
+            EmailKey: self.email!,
+            PasswordKey: self.password!,
+            identiferKey: self.identifier,
+        ]
+    }
 }
 
 func ==(lhs:User, rhs:User) -> Bool {

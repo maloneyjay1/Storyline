@@ -13,10 +13,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
-        UserController.createUser("vader@empire.gov", name: "Darth Vader", password: "obiSucks101", url: "") { (success) -> Void in
-            print("User Created")
+        UserController.createUser("vader@empire.gov", name: "Darth Vader", id: "1234", password: "obiSucks101", url: "randomURL") { (success) -> Void in
         }
         
 //        EntryController.addEntry("Identifier", name: "-K4_7B3WGQGya2DJ4H3t", postedInMain: false, text: "Text", dateCreated: NSDate()) { (identifier) -> Void in
