@@ -80,6 +80,7 @@ class UserController {
                 
                 UserController.userForIdentifier(response.uid, completion: { (user) -> Void in
                     
+                    print("hi")
                     if let user = user {
                         
                         sharedController.currentUser = user
