@@ -97,24 +97,26 @@ class UserController {
             
             dispatch_group_enter(dispatchGroup)
             
-            if let id = response["id"] as? String {
+//            if let id = response["id"] as? String {
+            
+                //                var user = User(id: name, uid: id, name: UserController.sharedController.currentUser.name, 
+                //                email: email, password: password)
+                //                user.save()
                 
-                var user = User(id: name, uid: id, name: UserController.sharedController.currentUser.name, email: email, password: password)
-                user.save()
-                
-                //        let userURLRef = FirebaseController.base.childByAppendingPath("/users/")
-                //        let newUserRef = userURLRef.childByAutoId()
-                //        let userRefIdentifier = newUserRef.key
-                //        var user = User(id: userRefIdentifier, uid: uid, name: UserController.sharedController.currentUser.name, email: email, password: password)
-                //        let userJson = user.dictionaryOfUser
-                //        FirebaseController.base.childByAppendingPath("/users/\(userRefIdentifier)").updateChildValues(userJson)
+                let userURLRef = FirebaseController.base.childByAppendingPath("/users/")
+                let newUserRef = userURLRef.childByAutoId()
+                let userRefIdentifier = newUserRef.key
+                let user = User(id: userRefIdentifier, uid: id, name: name, email: email, password: password)
+                let userJson = user.dictionaryOfUser
+                FirebaseController.base.childByAppendingPath("/users/\(userRefIdentifier)").updateChildValues(userJson())
                 
                 print("\(user) created.")
                 
                 authenticateUser(email, password: password, completion: { (success, user) -> Void in
                     completion(success: success)
+                    
                 })
-            }
+//            }
             
             dispatch_group_leave(dispatchGroup)
             
