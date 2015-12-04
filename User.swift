@@ -81,6 +81,7 @@ struct User: Equatable, FirebaseType {
             EmailKey: self.email!,
             PasswordKey: self.password!,
             identiferKey: self.identifier,
+
         ]
     }
 }

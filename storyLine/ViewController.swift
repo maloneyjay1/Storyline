@@ -13,10 +13,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        UserController.createUser("vader@empire.gov", name: "Darth Vader", uid: "", id: "", password: "obiSucks101", url: "url") { (success) -> Void in
+//        }
         
-        UserController.authenticateUser("vader@empire.gov", password: "obiSucks101") { (success, user) -> Void in
-            print("\(success, user)")
+        UserController.updateUser("anakin@skywalker.com", name: "Anakin Skywalker", uid: "", id: "", password: "obiSucks01", url: "url") { (success, user) -> Void in
+            print(success, user)
         }
+        
+
         
 
     }

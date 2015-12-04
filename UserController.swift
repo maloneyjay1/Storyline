@@ -67,7 +67,7 @@ class UserController {
         }
     }
     
-    
+    //successful test
     static func authenticateUser(email: String, password: String, completion: (success: Bool, user: User?) -> Void) {
         
         FirebaseController.base.authUser(email, password: password) { (error, response) -> Void in
@@ -80,10 +80,10 @@ class UserController {
                 
                 UserController.userForIdentifier(response.uid, completion: { (user) -> Void in
                     
-                    print("hi")
                     if let user = user {
                         
                         sharedController.currentUser = user
+                        
                     }
                     
                     completion(success: true, user: user)
@@ -93,7 +93,7 @@ class UserController {
     }
     
     //successful test
-    static func createUser(email: String, name: String, id: String, password: String, url: String?, completion: (success: Bool) -> Void) {
+    static func createUser(email: String, name: String, uid: String, id: String, password: String, url: String?, completion: (success: Bool) -> Void) {
         
         FirebaseController.base.createUser(email, password: password) { (error, response) -> Void in
             
@@ -101,17 +101,15 @@ class UserController {
             
             dispatch_group_enter(dispatchGroup)
             
-//            if let id = response["id"] as? String {
-            
-                //                var user = User(id: name, uid: id, name: UserController.sharedController.currentUser.name, 
-                //                email: email, password: password)
-                //                user.save()
+            if let id = response["uid"] as? String {
                 
                 let userURLRef = FirebaseController.base.childByAppendingPath("/users/")
                 let newUserRef = userURLRef.childByAutoId()
                 let userRefIdentifier = newUserRef.key
-                let user = User(id: userRefIdentifier, uid: id, name: name, email: email, password: password)
+                
+                let user = User(id: NSUUID().UUIDString, uid:id, name: name, email: email, password: password)
                 let userJson = user.dictionaryOfUser
+                
                 FirebaseController.base.childByAppendingPath("/users/\(userRefIdentifier)").updateChildValues(userJson())
                 
                 print("\(user) created.")
@@ -120,7 +118,8 @@ class UserController {
                     completion(success: success)
                     
                 })
-//            }
+                
+            }
             
             dispatch_group_leave(dispatchGroup)
             
@@ -130,17 +129,25 @@ class UserController {
         
     }
     
-    static func updateUser(user: User, name: String, url: String?, email: String?, password: String?, completion: (success: Bool, user: User?) -> Void) {
+
+    static func updateUser(email: String, name: String, uid: String, id: String, password: String, url: String?, completion: (success: Bool, user: User?) -> Void) {
         
         let dispatchGroup = dispatch_group_create()
         
         dispatch_group_enter(dispatchGroup)
         
-        var updatedUser = User(id: user.id, uid: user.identifier, name: user.name!, email: user.email, password: user.password)
+        let updatedUser = User(id: NSUUID().UUIDString, uid: id, name: name, email: email, password: password)
         
-        updatedUser.save()
-        print("\(updatedUser) updated.")
-        UserController.userForIdentifier(user.identifier) { (user) -> Void in
+        let userURLRef = FirebaseController.base.childByAppendingPath("/users/\(uid)")
+    
+        let userJson = updatedUser.dictionaryOfUser()
+        
+//        FirebaseController.base.childByAppendingPath("/users/\(uid)").removeValue()
+      
+        userURLRef.updateChildValues(userJson)
+        
+        print("\(updatedUser.name) updated.")
+        UserController.userForIdentifier(updatedUser.identifier) { (user) -> Void in
             
             if let user = user {
                 
