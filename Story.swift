@@ -14,21 +14,21 @@ struct Story: Equatable, FirebaseType {
     private let IDKey = "id"
     private let EntriesKey = "entries"
     private let DateCreatedKey = "dateCreated"
-    private let identifierKey = "identifier"
     private let StoryPromptKey = "storyPrompt"
+    private let UIDKey = "uid"
     
     
     var entries: [[String:AnyObject]]
     let dateCreated: NSDate
-    var identifier: String
+    var uid: String
     var storyPrompt: String
     
-    init(entries: [[String:AnyObject]], dateCreated: NSDate, identifier: String, storyPrompt: String) {
+    init(entries: [[String:AnyObject]], dateCreated: NSDate, uid: String, storyPrompt: String) {
         
 
         self.entries = entries
         self.dateCreated = dateCreated
-        self.identifier = identifier
+        self.uid = uid
         self.storyPrompt = storyPrompt
         
     }
@@ -39,15 +39,15 @@ struct Story: Equatable, FirebaseType {
     
     var jsonValue: [String: AnyObject] {
         let dateCreatedString = String(dateCreated)
-        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, identifierKey:identifier, EntriesKey: entries, StoryPromptKey: storyPrompt]
+        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, UIDKey:uid, EntriesKey: entries, StoryPromptKey: storyPrompt]
                 return json
     }
     
-    init?(json: [String: AnyObject], identifier: String) {
+    init?(json: [String: AnyObject], uid: String) {
         
-        guard let identifier = json[identifierKey] as? String else {
+        guard let uid = json[UIDKey] as? String else {
             
-            self.identifier = ""
+            self.uid = ""
 
             return nil
         }
@@ -73,7 +73,7 @@ struct Story: Equatable, FirebaseType {
             return nil
         }
         
-        self.identifier = identifier
+        self.uid = uid
         return nil
 
     }
@@ -81,7 +81,7 @@ struct Story: Equatable, FirebaseType {
 
 func ==(lhs:Story, rhs:Story) -> Bool {
     
-    return (lhs.identifier == rhs.identifier)
+    return (lhs.uid == rhs.uid)
 }
 
 

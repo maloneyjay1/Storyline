@@ -12,6 +12,11 @@ import UIKit
 //remove entry from story,
 //update story
 
+//needs function to append entry with most likes in likes array at end of 24 hour period, and delete the rest of the entries.
+    //this function also needs tie breaker logic.
+
+// Get likes for entries in entry array, loop through and compare number of likes of paired entries, and append any tied objects to a tie array.  if no tie, directly append winning entry to story property of entries.
+
 class StoryController {
     
     private let StoryKey = "story"
@@ -19,13 +24,14 @@ class StoryController {
     static let sharedController = StoryController()
     
     var currentStory: Story! {
+        
         get {
             
             guard let storyDictionary = NSUserDefaults.standardUserDefaults().valueForKey(StoryKey) as? [String: AnyObject] else {
                 return nil
             }
             
-            return Story(json: storyDictionary, identifier: StoryController.sharedController.currentStory.identifier)
+            return Story(json: storyDictionary, uid: StoryController.sharedController.currentStory.uid)
         }
         set {
             
@@ -45,13 +51,13 @@ class StoryController {
         return users.sort({$0.0.name > $0.1.name})
     }
     
-    static func usersForStory(identifier: String, completion: (users: [User]?) -> Void) {
+    static func usersForStory(uid: String, completion: (users: [User]?) -> Void) {
         
-        FirebaseController.base.childByAppendingPath("users").queryOrderedByChild("identifier").queryEqualToValue(identifier).observeSingleEventOfType(.Value, withBlock: { snapshot in
+        FirebaseController.base.childByAppendingPath("users").queryOrderedByChild("uid").queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock: { snapshot in
             
             if let userDictionaries = snapshot.value as? [String: AnyObject] {
                 
-                let users = userDictionaries.flatMap({User(json: $0.1 as! [String:AnyObject], identifier: $0.0)})
+                let users = userDictionaries.flatMap({User(json: $0.1 as! [String:AnyObject], uid: $0.0)})
                 
                 let orderedUsers = orderUsers(users)
                 
@@ -61,9 +67,9 @@ class StoryController {
     }
     
 
-    static func addStory(identifier: String, entries: [[String:AnyObject]], storydateCreated: NSDate, storyPrompt: String, completion: (story:Story?) -> Void) {
+    static func addStory(uid: String, entries: [[String:AnyObject]], storydateCreated: NSDate, storyPrompt: String, completion: (story:Story?) -> Void) {
         
-        var story = Story(entries: entries, dateCreated: NSDate(), identifier: NSUUID().UUIDString, storyPrompt: "")
+        var story = Story(entries: entries, dateCreated: NSDate(), uid: UserController.sharedController.currentUser.uid, storyPrompt: "")
         
         story.save()
         completion(story: story)
@@ -99,7 +105,7 @@ class StoryController {
         
         dispatch_group_enter(dispatchGroup)
         
-        usersForStory(StoryController.sharedController.currentStory.identifier, completion: {
+        usersForStory(StoryController.sharedController.currentStory.uid, completion: {
             (users) -> Void in
             
             if let users = users {
@@ -111,7 +117,7 @@ class StoryController {
         
         dispatch_group_enter(dispatchGroup)
         
-        usersForStory(story.identifier, completion: { (users) -> Void in
+        usersForStory(story.uid, completion: { (users) -> Void in
             
             if let users = users {
                 allUsers += users

@@ -44,12 +44,12 @@ class FirebaseController {
 
 protocol FirebaseType {
     
-    var identifier: String { get set }
+    var uid: String { get set }
     var endpoint: String { get }
     var jsonValue: [String: AnyObject] { get }
     
 
-    init?(json: [String: AnyObject], identifier: String)
+    init?(json: [String: AnyObject], uid: String)
 
     mutating func save()
     func delete()
@@ -62,7 +62,7 @@ extension FirebaseType {
         var endpointBase: Firebase
         
         endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAutoId()
-        self.identifier = endpointBase.key
+        self.uid = endpointBase.key
         
         endpointBase.updateChildValues(self.jsonValue)
         
@@ -70,9 +70,54 @@ extension FirebaseType {
     
     func delete() {
         
-        let endpointBase: Firebase = FirebaseController.base.childByAppendingPath(endpoint).childByAppendingPath(self.identifier)
+        let endpointBase: Firebase = FirebaseController.base.childByAppendingPath(endpoint).childByAppendingPath(self.uid)
         
         endpointBase.removeValue()
+    }
+    
+    func syncFromFirebase() {
+        let user = UserController.sharedController.currentUser
+        FirebaseController.dataAtEndpoint("users/\(user.uid)/", completion: { (data) -> Void in
+            if let jsonDic = data as? [String:AnyObject] {
+                
+                let updatedUser = User(json: jsonDic, uid: user!.uid)
+                UserController.sharedController.currentUser = updatedUser
+            }
+            
+        })
+    }
+    
+    func update() {
+        
+        let user = UserController.sharedController.currentUser
+        UserController.updateUser(user, name: user.name) { (success, user) -> Void in
+            if success == true {
+                // completion(success: true, user: user)
+                
+                FirebaseController.dataAtEndpoint("users/\(user!.uid)/", completion: { (data) -> Void in
+                    if let jsonDic = data as? [String:AnyObject] {
+                        
+                        let updatedUser = User(json: jsonDic, uid: user!.uid)
+                        UserController.sharedController.currentUser = updatedUser
+                    }
+                    
+                })
+                
+                print(UserController.sharedController.currentUser.name)
+            } else {
+                print("no user")
+            }
+            
+            let user = UserController.sharedController.currentUser
+            FirebaseController.dataAtEndpoint("users/\(user.uid)/", completion: { (data) -> Void in
+                if let jsonDic = data as? [String:AnyObject] {
+                    
+                    let updatedUser = User(json: jsonDic, uid: user!.uid)
+                    UserController.sharedController.currentUser = updatedUser
+                    
+                }
+            })
+        }
     }
 }
 

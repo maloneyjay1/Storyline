@@ -9,21 +9,25 @@
 import Foundation
 
 class UserController {
-    
+  
     private let UserKey = "user"
+    private let EmailKey = "email"
+    private let NameKey = "name"
+    private let UIDKey = "uid"
+    private let IDKey = "id"
+    private let PasswordKey = "password"
+    private let URLKey = "url"
     
     static let sharedController = UserController()
     
     var currentUser: User! {
+        
         get {
             
             guard let uid = FirebaseController.base.authData?.uid,
-                let userDictionary = NSUserDefaults.standardUserDefaults().valueForKey(UserKey) as? [String: AnyObject] else {
-                    
-                    return nil
-            }
-            
-            return User(json: userDictionary, identifier: uid)
+                let userDictionary = NSUserDefaults.standardUserDefaults().valueForKey(UserKey) as? [String: AnyObject] else{return nil}
+            let user = User(json: userDictionary, uid: uid)
+            return user
         }
         
         set {
@@ -39,18 +43,20 @@ class UserController {
     }
     
     //test successful
-    static func userForIdentifier(identifier: String, completion: (user: User?) -> Void) {
+    static func userForIdentifier(uid: String, completion: (user: User?) -> Void) {
         
-        FirebaseController.dataAtEndpoint("users/\(identifier)") { (data) -> Void in
+        FirebaseController.dataAtEndpoint("users/\(uid)") { (data) -> Void in
             
             if let json = data as? [String: AnyObject] {
-                let user = User(json: json, identifier: identifier)
+                let user = User(json: json, uid: uid)
                 completion(user: user)
             } else {
                 completion(user: nil)
             }
         }
     }
+    
+    
     
     //successful test
     static func fetchAllUsers(completion: (users: [User]) -> Void) {
@@ -59,13 +65,15 @@ class UserController {
             
             if let json = data as? [String: AnyObject] {
                 
-                let users = json.flatMap({User(json: $0.1 as! [String : AnyObject], identifier: $0.0)})
+                let users = json.flatMap({User(json: $0.1 as! [String : AnyObject], uid: $0.0)})
                 
                 completion(users: users)
                 
             }
         }
     }
+    
+
     
     //successful test
     static func authenticateUser(email: String, password: String, completion: (success: Bool, user: User?) -> Void) {
@@ -85,94 +93,86 @@ class UserController {
                         sharedController.currentUser = user
                         
                     }
-                    
                     completion(success: true, user: user)
                 })
             }
         }
     }
+
     
     //successful test
-    static func createUser(email: String, name: String, uid: String, id: String, password: String, url: String?, completion: (success: Bool) -> Void) {
+    static func createFirebaseUser(email: String, name: String, password: String, completion: (success: Bool, user: User?) -> Void) {
         
-        FirebaseController.base.createUser(email, password: password) { (error, response) -> Void in
-            
-            let dispatchGroup = dispatch_group_create()
-            
-            dispatch_group_enter(dispatchGroup)
-            
-            if let id = response["uid"] as? String {
-                
-                let userURLRef = FirebaseController.base.childByAppendingPath("/users/")
-                let newUserRef = userURLRef.childByAutoId()
-                let userRefIdentifier = newUserRef.key
-                
-                let user = User(id: NSUUID().UUIDString, uid:id, name: name, email: email, password: password)
-                let userJson = user.dictionaryOfUser
-                
-                FirebaseController.base.childByAppendingPath("/users/\(userRefIdentifier)").updateChildValues(userJson())
-                
-                print("\(user) created.")
-                
-                authenticateUser(email, password: password, completion: { (success, user) -> Void in
-                    completion(success: success)
+        FirebaseController.base.createUser(email, password: password) { (error, newlyCreatedUser) -> Void in
+            if error != nil {
+                print(error.localizedDescription)
+                completion(success: false, user: nil)
+            } else {
+                if let uid = newlyCreatedUser["uid"] as? String {
                     
-                })
-                
+                    let allUsersRef = FirebaseController.base.childByAppendingPath("/users/")
+                    let newUserRef = allUsersRef.childByAppendingPath(uid)
+                    
+                    let newUser = User(uid: uid, name: name, email: email, password: password)
+                    let userJson = newUser.dictionaryOfUser()
+                    
+                    newUserRef.setValue(userJson, withCompletionBlock: { (error, Firebase) -> Void in
+                        
+                        authenticateUser(email, password: password, completion: { (success, user) -> Void in
+                            completion(success: true, user: newUser)
+                            
+                        })
+                    })
+                }
             }
-            
-            dispatch_group_leave(dispatchGroup)
-            
         }
-        
-        completion(success: true)
-        
     }
-    
 
-    static func updateUser(email: String, name: String, uid: String, id: String, password: String, url: String?, completion: (success: Bool, user: User?) -> Void) {
+    //test successful
+    static func updateUser(user: User, name: String?, completion: (success: Bool, user: User?) -> Void) {
         
-        let dispatchGroup = dispatch_group_create()
-        
-        dispatch_group_enter(dispatchGroup)
-        
-        let updatedUser = User(id: NSUUID().UUIDString, uid: id, name: name, email: email, password: password)
-        
-        let userURLRef = FirebaseController.base.childByAppendingPath("/users/\(uid)")
+//        let PasswordKey = "password"
+//        let EmailKey = "email"
+        let NameKey = "name"
     
-        let userJson = updatedUser.dictionaryOfUser()
+        let userURLRef = FirebaseController.base.childByAppendingPath("users/\(user.uid)/")
         
-//        FirebaseController.base.childByAppendingPath("/users/\(uid)").removeValue()
-      
-        userURLRef.updateChildValues(userJson)
+//        if let password = password {
+//            userURLRef.updateChildValues([PasswordKey:password])
+//        } else {
+//            print("nil")
+//        }
+//        
+//        if let email = email {
+//            userURLRef.updateChildValues([EmailKey:email])
+//        } else {
+//            print("nil")
+//        }
         
-        print("\(updatedUser.name) updated.")
-        UserController.userForIdentifier(updatedUser.identifier) { (user) -> Void in
-            
-            if let user = user {
-                
-                sharedController.currentUser = user
-            }
-            
-            completion(success: true, user: user)
+        if let name = name {
+            userURLRef.updateChildValues([NameKey:name])
+        } else {
+            print("nil")
         }
         
-        dispatch_group_leave(dispatchGroup)
+        completion(success: true, user: user)
+        
     }
+    
     
     static func logoutCurrentUser() {
         
         FirebaseController.base.unauth()
-        
         sharedController.currentUser = nil
+        
     }
     
-    static func mockUsers() -> [User] {
-        
-        let user1 = User(id: "123", uid: "1234", name: "Leeroy Jenkins", email: "leeroy@jenkins.com", password: "password1")
-        let user2 = User(id: "456", uid: "987", name: "Darth Vader", email: "vader@empire.gov", password: "darkside")
-        
-        return [user1, user2]
-    }
+//    static func mockUsers() -> [User] {
+//        
+//        let user1 = User(id: "123", uid: "1234", name: "Leeroy Jenkins", email: "leeroy@jenkins.com", password: "password1")
+//        let user2 = User(id: "456", uid: "987", name: "Darth Vader", email: "vader@empire.gov", password: "darkside")
+//        
+//        return [user1, user2]
+//    }
     
 }

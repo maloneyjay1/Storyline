@@ -15,22 +15,18 @@ struct User: Equatable, FirebaseType {
     private let EmailKey = "email"
     private let PasswordKey = "password"
     private let URLKey = "url"
-    private let IDKey = "id"
-    private let identiferKey = "identifier"
-    
-    let id: String
+
     let name: String?
     var email: String?
     var password: String?
-    var identifier: String
+    var uid: String
     
-    init(id: String, uid: String, name: String? = nil, email: String? = nil, password: String? = nil) {
-        
-        self.id = id
+    init(uid: String, name: String? = nil, email: String? = nil, password: String? = nil) {
+    
         self.name = name
         self.email = email
         self.password = password
-        self.identifier = uid
+        self.uid = uid
         
     }
     
@@ -57,30 +53,31 @@ struct User: Equatable, FirebaseType {
         return json
     }
     
-    init?(json: [String: AnyObject], identifier: String) {
+    init?(json: [String: AnyObject], uid: String) {
         
-        guard let id = json[IDKey] as? String else {
+        guard let name = json[NameKey] as? String else {
             
-            self.id = ""
+            self.name = json[NameKey] as? String
+         
             
             return nil
         }
         
-        self.id = id
-        self.name = json[NameKey] as? String
+        self.name = name
         self.email = json[EmailKey] as? String
         self.password = json[PasswordKey] as? String
-        self.identifier = identifier
+        self.uid = uid
+       
+ 
         
     }
     
     func dictionaryOfUser() -> [String:AnyObject] {
         
-        return [IDKey: self.id,
-            NameKey: self.name!,
+        return [NameKey: self.name!,
             EmailKey: self.email!,
             PasswordKey: self.password!,
-            identiferKey: self.identifier,
+            UIDKey: self.uid,
 
         ]
     }
@@ -88,5 +85,5 @@ struct User: Equatable, FirebaseType {
 
 func ==(lhs:User, rhs:User) -> Bool {
     
-    return (lhs.id == rhs.id) && (lhs.identifier == rhs.identifier)
+    return (lhs.name == rhs.name) && (lhs.uid == rhs.uid)
 }

@@ -17,25 +17,29 @@ struct Entry: Equatable, FirebaseType {
     private let TextKey = "text"
     private let DateCreatedKey = "dateCreated"
     private let PostedInMainKey = "postedInMain"
-    private let identiferKey = "identifier"
     private let likesKey = "likes"
     private let nameKey = "name"
+    private let UIDKey = "uid"
+    private let EIDKey = "eid"
     
     let text: String
-    var postedInMain: Bool?
-    var identifier: String
     var likes: [String]
     var dateCreated: NSDate
     let name: String
+    var uid: String
+    let eid: String
     
-    init(identifier: String, name: String = UserController.sharedController.currentUser.name!, postedInMain: Bool, text: String? = nil, dateCreated: NSDate, likes: [String] = []) {
+    
+    
+    //complete eid stuff
+    init(uid: String, eid: String, name: String = UserController.sharedController.currentUser.name!, text: String? = nil, dateCreated: NSDate, likes: [String] = []) {
         
         self.text = text!
-        self.postedInMain = postedInMain
         self.likes = likes
         self.dateCreated = dateCreated
-        self.identifier = identifier
+        self.uid = uid
         self.name = name
+        self.eid = eid
         
     }
     
@@ -45,32 +49,31 @@ struct Entry: Equatable, FirebaseType {
     
     var jsonValue: [String: AnyObject] {
         
-        var json: [String: AnyObject] = [nameKey: self.name, likesKey: self.likes, TextKey: self.text, identiferKey: self.identifier, DateCreatedKey: self.dateCreated]
+        let json: [String: AnyObject] = [nameKey: self.name, likesKey: self.likes, TextKey: self.text, UIDKey: self.uid, EIDKey: self.eid, DateCreatedKey: self.dateCreated]
         
-        if let postedInMain = self.postedInMain {
-            json.updateValue(postedInMain, forKey: PostedInMainKey)
-        }
         return json
     }
     
     //initialize json dictionary
-    init?(json: [String: AnyObject], identifier: String) {
+    init?(json: [String: AnyObject], uid: String) {
         
         //if json can store a property as? this type
         guard let name = json[nameKey] as? String,
-            let identifier = json[identiferKey] as? String,
+            let uid = json[UIDKey] as? String,
+            let eid = json[EIDKey] as? String,
             let text = json[TextKey] as? String,
             let likeStringArray = json[likesKey] as? [String],
             let dateCreatedString = json[DateCreatedKey] as? String
 //            let postedInMain = json[PostedInMainKey] as? Bool
+            
         else {
         
                 // failure to create temporary objects, give these values
                 self.name = ""
-                self.identifier = ""
+                self.uid = UserController.sharedController.currentUser.uid
+            self.eid = ""
                 self.text = ""
                 self.dateCreated = NSDate()
-                self.postedInMain = false
                 self.likes = []
                 
                 return nil
@@ -79,11 +82,8 @@ struct Entry: Equatable, FirebaseType {
         // success, set (self's) object properties to temporary object
         self.text = text
         self.name = name
-        self.identifier = identifier
-        
-        if let postedInMain = json[PostedInMainKey] as? Bool {
-            self.postedInMain = postedInMain
-        }
+        self.uid = uid
+        self.eid = eid
         
         
 //        self.likes = // TODO: - /users/uid/likes/lid
@@ -91,7 +91,6 @@ struct Entry: Equatable, FirebaseType {
         //self.likes = likeDictionaries.flatMap({Like(json: $0.1 as! [String : AnyObject], identifier: $0.0)})
         self.likes = likeStringArray
         self.dateCreated = NSDate()
-        
         let dateFormatter = NSDateFormatter()
         let date = dateFormatter.dateFromString(dateCreatedString)
         if let nsDate = date {
@@ -100,13 +99,18 @@ struct Entry: Equatable, FirebaseType {
         
     }
     
-    func dictionaryOfEntry() -> [String:AnyObject] {
+    mutating func dictionaryOfEntry() -> [String:AnyObject] {
+        
+        let date = NSDate()
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "hh:mm"
+        let dateString = dateFormatter.stringFromDate(date)
 
         return [TextKey: self.text,
-            PostedInMainKey: self.postedInMain!,
-            identiferKey: self.identifier,
+            UIDKey: self.uid,
+            EIDKey: self.eid,
             likesKey: self.likes,
-            DateCreatedKey: self.dateCreated,
+            DateCreatedKey: dateString,
             nameKey: self.name,
         ]
     }
@@ -115,7 +119,7 @@ struct Entry: Equatable, FirebaseType {
 
 func ==(lhs:Entry, rhs:Entry) -> Bool {
     
-    return (lhs.name == rhs.name) && (lhs.identifier == rhs.identifier)
+    return (lhs.name == rhs.name) && (lhs.uid == rhs.uid)
     
 }
 

@@ -14,17 +14,17 @@ struct Like: Equatable, FirebaseType {
     private let EntryKey = "entry"
     private let NameKey = "name"
     private let EntryIdentifierKey = "entryIdentifier"
-    private let IdentifierKey = "identifier"
+    private let UIDKey = "uid"
     
     let name: String
     let entryIdentifier: String
-    var identifier: String
+    var uid: String
     
-    init(name: String, entryIdentifier: String, identifier: String) {
+    init(name: String, entryIdentifier: String, uid: String) {
         
         self.name = name
         self.entryIdentifier = entryIdentifier
-        self.identifier = identifier
+        self.uid = uid
     }
     
     // MARK: FirebaseType
@@ -40,12 +40,12 @@ struct Like: Equatable, FirebaseType {
         return [UserKey: self.name, EntryKey: self.entryIdentifier]
     }
     
-    init?(json: [String: AnyObject], identifier: String) {
+    init?(json: [String: AnyObject], uid: String) {
         
         guard let postIdentifier = json[EntryKey] as? String,
             let name = json[UserKey] as? String else {
                 
-                self.identifier = ""
+                self.uid = ""
                 self.entryIdentifier = ""
                 self.name = ""
                 
@@ -54,19 +54,19 @@ struct Like: Equatable, FirebaseType {
         
         self.entryIdentifier = postIdentifier
         self.name = name
-        self.identifier = identifier
+        self.uid = uid
     }
     
     func dictionaryOfLike() -> [String:AnyObject] {
         
         return [NameKey: self.name,
             EntryIdentifierKey: self.entryIdentifier,
-            IdentifierKey: self.identifier
+            UIDKey: self.uid
         ]
     }
 }
 
 func ==(lhs: Like, rhs: Like) -> Bool {
     
-    return (lhs.name == rhs.name) && (lhs.identifier == rhs.identifier)
+    return (lhs.name == rhs.name) && (lhs.uid == rhs.uid)
 }

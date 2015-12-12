@@ -10,14 +10,76 @@
 import Foundation
 import UIKit
 
-//STILL NEED A submitEntryToStagingArea function, with dispatch_group
-//do I need a staging area object?  or can I just append to array in entryController?
 
 class EntryController {
     
     private let entryKey = "entry"
     
     static let sharedController = EntryController()
+    
+    var userEntry: Entry! {
+        
+        get {
+            guard let uid = FirebaseController.base.authData?.uid, let entryDictionary = NSUserDefaults.standardUserDefaults().valueForKey(entryKey) as? [String: AnyObject] else{return nil}
+            let entry = Entry(json: entryDictionary, uid: uid)
+            return entry
+            
+        }
+        
+        set {
+            
+            if let newValue = newValue {
+                NSUserDefaults.standardUserDefaults().setValue(newValue.jsonValue, forKey: entryKey)
+                NSUserDefaults.standardUserDefaults().synchronize()
+            } else {
+                NSUserDefaults.standardUserDefaults().removeObjectForKey(entryKey)
+                NSUserDefaults.standardUserDefaults().synchronize()
+            }
+        }
+    }
+    
+    static func createEntry(uid:String = UserController.sharedController.currentUser.uid, name: String = UserController.sharedController.currentUser.name!, text: String?, dateCreated: NSDate, completion: (success: Bool, eid: String, newEntry: Entry) -> Void) {
+        
+        
+        let allEntriesRef = FirebaseController.base.childByAppendingPath("/entries/")
+        //because this is not a user creation, i manually create the parent firebase id
+        let newEntryRef = allEntriesRef.childByAutoId()
+        let eid = newEntryRef.key
+        
+        
+        var newEntry = Entry(uid: uid, eid: eid, name: name, text: text, dateCreated: dateCreated , likes: [])
+        let entryJson = newEntry.dictionaryOfEntry()
+        
+        newEntryRef.setValue(entryJson, withCompletionBlock: { (error, Firebase) -> Void in
+            
+            if error != nil {
+                print(error)
+            } else {
+                print(Firebase)
+            }
+        })
+
+        completion(success: true, eid: eid, newEntry: newEntry)
+        //will return success bool, actual entry parent reference, and the actual model object
+        
+    }
+    
+    
+    
+    static func entryFromIdentifier(user: User, uid: String, completion: (entry: Entry?) -> Void)
+        
+    {
+        FirebaseController.dataAtEndpoint("entries/\(user.uid)") { (data) -> Void in
+            
+            if let data = data as? [String: AnyObject] {
+                let entry = Entry(json: data, uid: user.uid)
+                
+                completion(entry: entry)
+            } else {
+                completion(entry: nil)
+            }
+        }
+    }
     
     static func fetchEntryForUser(user: User, completion: (entries: [Entry]?) -> Void) {
         
@@ -37,8 +99,6 @@ class EntryController {
                 dispatch_group_leave(dispatchGroup)
         })
         
-        
-        dispatch_group_enter(dispatchGroup)
         
         entriesForUser(user.name!, completion: { (entries) -> Void in
             
@@ -60,63 +120,30 @@ class EntryController {
     }
     
     
-    static func addEntry(identifier:String, name: String = UserController.sharedController.currentUser.name!, postedInMain: Bool, text: String?, dateCreated: NSDate, completion: (identifier: String?) -> Void) {
-        
-        let entry = Entry(identifier: identifier, name: name, postedInMain: postedInMain, text: text, dateCreated: dateCreated, likes: [])
-        let entryDic = entry.dictionaryOfEntry()
-        let base = FirebaseController.base.childByAppendingPath("entries").childByAutoId()
-        base.setValue(entryDic)
-        
-//        UserController.addEntrytoUser(creator, tid: base.key)
-//        for uid in allUsers{
-//            UserController.addTriptoUser(uid, tid: base.key)
-        
-        completion(identifier: base.key)
-        
-    }
-    
-    
-    static func entryFromIdentifier(identifier: String, completion: (entry: Entry?) -> Void) {
-        
-        FirebaseController.dataAtEndpoint("entries/\(identifier)") { (data) -> Void in
-            
-            if let data = data as? [String: AnyObject] {
-                let entry = Entry(json: data, identifier: identifier)
-                
-                completion(entry: entry)
-            } else {
-                completion(entry: nil)
-            }
-        }
-    }
-    
-
-    static func appendEntryToMainStory(entry:Entry, completion: (entry: Entry?) -> Void) {
+    static func appendEntryToMainStory(var entry:Entry, completion: (entry: Entry?) -> Void) {
         
         StoryController.sharedController.currentStory.entries.append(entry.dictionaryOfEntry())
         StoryController.sharedController.currentStory.save()
         completion(entry:entry)
         
     }
-
+    
     
     static func removeEntryFromMainStory(entry:Entry, completion: (success: Bool) -> Void) {
         
         entry.delete()
         StoryController.sharedController.currentStory.save()
         completion(success: true)
-
+        
     }
     
-    
-    //if the entriesForUser call produces entries with likes, display likes property of said entry
     
     static func entriesForUser(name: String, completion: (entries: [Entry]?) -> Void) {
         FirebaseController.base.childByAppendingPath("entries").queryOrderedByChild("name").queryEqualToValue(name).observeSingleEventOfType(.Value, withBlock: { snapshot in
             
             if let entryDictionaries = snapshot.value as? [String: AnyObject] {
                 
-                let entries = entryDictionaries.flatMap({Entry(json: $0.1 as! [String : AnyObject], identifier: $0.0)})
+                let entries = entryDictionaries.flatMap({Entry(json: $0.1 as! [String : AnyObject], uid: $0.0)})
                 
                 let orderedEntries = orderEntries(entries)
                 
@@ -146,52 +173,55 @@ class EntryController {
     }
     
     
-    static func addLikeToEntry(entry: Entry, completion: (success: Bool, entry: Entry?) -> Void) {
+    static func addLikeToEntry(var entry: Entry, completion: (success: Bool, entry: Entry?) -> Void) {
         
-        let entryID = entry.identifier
-        //entry.save()
+        let entryID = entry.uid
+        entry.save()
         let likesRef = FirebaseController.base.childByAppendingPath("/likes/")
         let newLikeRef = likesRef.childByAutoId()
         let likesRefIdentifier = newLikeRef.key
-        let like = Like(name: UserController.sharedController.currentUser.identifier, entryIdentifier: entryID, identifier: likesRefIdentifier)
-        //MARK: where to get identifier?
+        
+        //name is name of current user, or "liker", entryIdentifier is the person who wrote the Entry, and uid is the Firebase-generated uid for the brand new Like itself.
+        let like = Like(name: UserController.sharedController.currentUser.name!, entryIdentifier: entryID, uid: likesRefIdentifier)
+        
         let likeJson = like.dictionaryOfLike()
         FirebaseController.base.childByAppendingPath("/likes/\(likesRefIdentifier)").updateChildValues(likeJson)
-        
-        EntryController.entryFromIdentifier(entry.identifier, completion: { (post) -> Void in
+        let user = UserController.sharedController.currentUser
+        EntryController.entryFromIdentifier(user, uid: entry.uid, completion: { (entry) -> Void in
             completion(success: true, entry: entry)
         })
+        
     }
     
     
     static func deleteLike(like: Like, completion: (success: Bool, entry: Entry?) -> Void) {
         
         like.delete()
-        
-        EntryController.entryFromIdentifier(like.entryIdentifier) { (entry) -> Void in
+        let user = UserController.sharedController.currentUser
+        EntryController.entryFromIdentifier(user, uid: like.uid, completion: { (entry) -> Void in
             completion(success: true, entry: entry)
-        }
+        })
     }
     
     
     static func orderEntries(entries: [Entry]) -> [Entry] {
         
-        // sorts posts chronologically using Firebase identifiers
-        return entries.sort({$0.0.identifier > $0.1.identifier})
+        //         sorts posts chronologically using Firebase identifiers
+        return entries.sort({$0.0.uid > $0.1.uid})
     }
     
     
-    static func mockEntries() -> [Entry] {
-        
-//        let like1 = Like(name: "darth", entryIdentifier: "1234", identifier: "1243")
-//        let like2 = Like(name: "kenobi", entryIdentifier: "986", identifier: "9783")
-//        let like3 = Like(name: "luke", entryIdentifier: "78393", identifier: "927")
-        
-        let entry1 = Entry(identifier: "145", name: "Jay", postedInMain: true, text: "This is a sweet entry", dateCreated: NSDate(), likes: ["like1","like2","like3"])
-        
-        return [entry1]
-        
-    }
+    //    static func mockEntries() -> [Entry] {
+    //
+    ////        let like1 = Like(name: "darth", entryIdentifier: "1234", identifier: "1243")
+    ////        let like2 = Like(name: "kenobi", entryIdentifier: "986", identifier: "9783")
+    ////        let like3 = Like(name: "luke", entryIdentifier: "78393", identifier: "927")
+    //
+    //        let entry1 = Entry(identifier: "145", name: "Jay", postedInMain: true, text: "This is a sweet entry", dateCreated: NSDate(), likes: ["like1","like2","like3"])
+    //
+    //        return [entry1]
+    //        
+    //    }
     
     
 }
