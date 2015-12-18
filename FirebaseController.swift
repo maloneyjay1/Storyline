@@ -44,7 +44,7 @@ class FirebaseController {
 
 protocol FirebaseType {
     
-    var uid: String { get set }
+    var uid: String? { get set }
     var endpoint: String { get }
     var jsonValue: [String: AnyObject] { get }
     
@@ -57,16 +57,32 @@ protocol FirebaseType {
 
 extension FirebaseType {
     
+//    mutating func save() {
+//        
+//        var endpointBase: Firebase
+//        
+//        endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAutoId()
+//        self.uid = endpointBase.key
+//        
+//        endpointBase.updateChildValues(self.jsonValue)
+//        
+//    }
+    
     mutating func save() {
         
         var endpointBase: Firebase
         
-        endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAutoId()
-        self.uid = endpointBase.key
+        if let childID = self.uid {
+            endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAppendingPath(childID)
+        } else {
+            endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAutoId()
+            self.uid = endpointBase.key
+        }
         
         endpointBase.updateChildValues(self.jsonValue)
         
     }
+    
     
     func delete() {
         
@@ -75,17 +91,19 @@ extension FirebaseType {
         endpointBase.removeValue()
     }
     
+    
     func syncFromFirebase() {
         let user = UserController.sharedController.currentUser
         FirebaseController.dataAtEndpoint("users/\(user.uid)/", completion: { (data) -> Void in
             if let jsonDic = data as? [String:AnyObject] {
                 
-                let updatedUser = User(json: jsonDic, uid: user!.uid)
+                let updatedUser = User(json: jsonDic, uid: user!.uid!)
                 UserController.sharedController.currentUser = updatedUser
             }
             
         })
     }
+    
     
     func update() {
         
@@ -97,7 +115,7 @@ extension FirebaseType {
                 FirebaseController.dataAtEndpoint("users/\(user!.uid)/", completion: { (data) -> Void in
                     if let jsonDic = data as? [String:AnyObject] {
                         
-                        let updatedUser = User(json: jsonDic, uid: user!.uid)
+                        let updatedUser = User(json: jsonDic, uid: user!.uid!)
                         UserController.sharedController.currentUser = updatedUser
                     }
                     
@@ -112,7 +130,7 @@ extension FirebaseType {
             FirebaseController.dataAtEndpoint("users/\(user.uid)/", completion: { (data) -> Void in
                 if let jsonDic = data as? [String:AnyObject] {
                     
-                    let updatedUser = User(json: jsonDic, uid: user!.uid)
+                    let updatedUser = User(json: jsonDic, uid: user!.uid!)
                     UserController.sharedController.currentUser = updatedUser
                     
                 }

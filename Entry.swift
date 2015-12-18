@@ -17,25 +17,25 @@ struct Entry: Equatable, FirebaseType {
     private let TextKey = "text"
     private let DateCreatedKey = "dateCreated"
     private let PostedInMainKey = "postedInMain"
-    private let likesKey = "likes"
+    //    private let likesKey = "likes"
     private let nameKey = "name"
     private let UIDKey = "uid"
     private let EIDKey = "eid"
     
     let text: String
-    var likes: [String]
+    //    var likes: [String]
     var dateCreated: NSDate
     let name: String
-    var uid: String
-    let eid: String
+    var uid: String?
+    let eid: String?
     
     
     
     //complete eid stuff
-    init(uid: String, eid: String, name: String = UserController.sharedController.currentUser.name!, text: String? = nil, dateCreated: NSDate, likes: [String] = []) {
+    init(uid: String, eid: String, name: String = UserController.sharedController.currentUser.name!, text: String? = nil, dateCreated: NSDate) {
         
         self.text = text!
-        self.likes = likes
+        //        self.likes = likes
         self.dateCreated = dateCreated
         self.uid = uid
         self.name = name
@@ -45,11 +45,11 @@ struct Entry: Equatable, FirebaseType {
     
     //MARK: FirebaseType
     
-    var endpoint: String = "entry"
+    var endpoint: String = "entries"
     
     var jsonValue: [String: AnyObject] {
         
-        let json: [String: AnyObject] = [nameKey: self.name, likesKey: self.likes, TextKey: self.text, UIDKey: self.uid, EIDKey: self.eid, DateCreatedKey: self.dateCreated]
+        let json: [String: AnyObject] = [nameKey: self.name, TextKey: self.text, UIDKey: self.uid!, EIDKey: self.eid!, DateCreatedKey: self.dateCreated]
         
         return json
     }
@@ -62,34 +62,25 @@ struct Entry: Equatable, FirebaseType {
             let uid = json[UIDKey] as? String,
             let eid = json[EIDKey] as? String,
             let text = json[TextKey] as? String,
-            let likeStringArray = json[likesKey] as? [String],
             let dateCreatedString = json[DateCreatedKey] as? String
-//            let postedInMain = json[PostedInMainKey] as? Bool
             
-        else {
-        
+            else {
+                
                 // failure to create temporary objects, give these values
                 self.name = ""
                 self.uid = UserController.sharedController.currentUser.uid
-            self.eid = ""
+                self.eid = ""
                 self.text = ""
                 self.dateCreated = NSDate()
-                self.likes = []
+                
                 
                 return nil
         }
         
-        // success, set (self's) object properties to temporary object
         self.text = text
         self.name = name
         self.uid = uid
         self.eid = eid
-        
-        
-//        self.likes = // TODO: - /users/uid/likes/lid
-        
-        //self.likes = likeDictionaries.flatMap({Like(json: $0.1 as! [String : AnyObject], identifier: $0.0)})
-        self.likes = likeStringArray
         self.dateCreated = NSDate()
         let dateFormatter = NSDateFormatter()
         let date = dateFormatter.dateFromString(dateCreatedString)
@@ -105,11 +96,11 @@ struct Entry: Equatable, FirebaseType {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "hh:mm"
         let dateString = dateFormatter.stringFromDate(date)
-
+        
         return [TextKey: self.text,
-            UIDKey: self.uid,
-            EIDKey: self.eid,
-            likesKey: self.likes,
+            UIDKey: self.uid!,
+            EIDKey: self.eid!,
+            //            likesKey: self.likes,
             DateCreatedKey: dateString,
             nameKey: self.name,
         ]

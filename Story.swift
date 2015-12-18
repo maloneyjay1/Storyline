@@ -17,15 +17,13 @@ struct Story: Equatable, FirebaseType {
     private let StoryPromptKey = "storyPrompt"
     private let UIDKey = "uid"
     
-    
     var entries: [[String:AnyObject]]
     let dateCreated: NSDate
-    var uid: String
+    var uid: String?
     var storyPrompt: String
     
     init(entries: [[String:AnyObject]], dateCreated: NSDate, uid: String, storyPrompt: String) {
-        
-
+    
         self.entries = entries
         self.dateCreated = dateCreated
         self.uid = uid
@@ -39,7 +37,7 @@ struct Story: Equatable, FirebaseType {
     
     var jsonValue: [String: AnyObject] {
         let dateCreatedString = String(dateCreated)
-        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, UIDKey:uid, EntriesKey: entries, StoryPromptKey: storyPrompt]
+        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, UIDKey:uid!, EntriesKey: entries, StoryPromptKey: storyPrompt]
                 return json
     }
     

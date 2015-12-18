@@ -150,6 +150,7 @@ class LoginSignupViewController: UIViewController {
         updateViewForMode(mode)
     }
     
+    
     func presentValidationAlertWithTitle(title: String, text: String) {
         
         let alert = UIAlertController(title: title, message: text, preferredStyle: .Alert)
@@ -157,27 +158,96 @@ class LoginSignupViewController: UIViewController {
         presentViewController(alert, animated: true, completion: nil)
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UserController.authenticateUser("vader@empire.gov", password: "yoda101") { (success, user) -> Void in
-            EntryController.createEntry(UserController.sharedController.currentUser.uid, name: UserController.sharedController.currentUser.name!, text: "Sample Entry", dateCreated: NSDate()) { (success, eid, newEntry) -> Void in
-                
-                if success == true {
-                    print("\(eid) created successfully!")
-                } else {
-                    print("Sorry, try again!")
-                }
-            }
-            
-            
-            if let name = UserController.sharedController.currentUser.name {
-                
-                print(EntryController.sharedController.userEntry)
-                
-                print("Thank you for your entry, \(name), created at \(EntryController.sharedController.userEntry.dateCreated). Good luck on being voted into the StoryLine!")
-            }
-        }
+        
+        
+        
+        //        EntryController.addLikeToFB(UserController.sharedController.currentUser.uid) { (success) -> Void in
+        //            if success {
+        //                print(success)
+        //            } else {
+        //                print("error")
+        //            }
+        //        }
+        
+        
+        //        EntryController.entriesForUser(UserController.sharedController.currentUser.uid) { (entries) -> Void in
+        //            if let entries = entries {
+        //                print(entries)
+        //            } else {
+        //                print("error")
+        //            }
+        //        }
+        
+        //
+        //                        EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
+        //                            if let entries = entries {
+        //                                print("\(entries)")
+        //                            } else {
+        //                                print("error")
+        //                            }
+        //                        }
+        //
+        //
+        
+        //        EntryController.entryFromIdentifier(UserController.sharedController.currentUser, uid: UserController.sharedController.currentUser.uid) { (entry) -> Void in
+        //
+        //            print("\(entry)")
+        //
+        //        }
+        
+        
+        
+        
+        //                UserController.createFirebaseUser("vader@empire.gov", name: "Darth Vader", password: "obihater101") { (success, user) -> Void in
+        //                    if success == true {
+        //                        print("Success for \(user).")
+        //                    } else {
+        //                        print("Failure.")
+        //                    }
+        //                }
+        
+        
+        
+        //        EntryController.createEntry(UserController.sharedController.currentUser.uid, name: UserController.sharedController.currentUser.name!, text: "Sample Entry", dateCreated: NSDate()) { (success, dateCreated, eid, newEntry) -> Void in
+        //
+        //            if let name = UserController.sharedController.currentUser.name {
+        //
+        //                if success == true {
+        //
+        //                    print("\(eid) created successfully!  Thank you \(name) for your entry, Entry:\(eid) created at \(dateCreated)")
+        //                } else {
+        //                    print("Sorry, try again!")
+        //                }
+        //            }
+        //        }
+        
+        
+        //        UserController.updateUser(UserController.sharedController.currentUser, name: "Anakin Dudebro") { (success, user) -> Void in
+        //            if success {
+        //                print("Success.")
+        //            } else {
+        //                print("Fail.")
+        //            }
+        //        }
+        
+        
+        //        UserController.authenticateUser("vader@empire.gov", password: "yoda101") { (success, user) -> Void in
+        //
+        //
+        //            EntryController.entriesForUser(UserController.sharedController.currentUser.name!, completion: { (entries) -> Void in
+        //                if let entries = entries {
+        //                    print("\(entries)")
+        //                } else {
+        //                    print("No Entries for \(UserController.sharedController.currentUser.name)")
+        //                }
+        //            })
+        //
+        //
+        
         
         updateViewForMode(mode)
     }

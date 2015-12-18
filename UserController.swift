@@ -42,6 +42,8 @@ class UserController {
         }
     }
     
+    
+    
     //test successful
     static func userForIdentifier(uid: String, completion: (user: User?) -> Void) {
         
@@ -101,12 +103,13 @@ class UserController {
 
     
     //successful test
-    static func createFirebaseUser(email: String, name: String, password: String, completion: (success: Bool, user: User?) -> Void) {
+    static func createFirebaseUser(email: String, name: String, password: String,completion: (success: Bool, user: User?) -> Void) {
         
         FirebaseController.base.createUser(email, password: password) { (error, newlyCreatedUser) -> Void in
             if error != nil {
                 print(error.localizedDescription)
                 completion(success: false, user: nil)
+                
             } else {
                 if let uid = newlyCreatedUser["uid"] as? String {
                     
@@ -127,28 +130,16 @@ class UserController {
             }
         }
     }
+    
 
-    //test successful
+    //testing
     static func updateUser(user: User, name: String?, completion: (success: Bool, user: User?) -> Void) {
         
-//        let PasswordKey = "password"
-//        let EmailKey = "email"
         let NameKey = "name"
-    
+
         let userURLRef = FirebaseController.base.childByAppendingPath("users/\(user.uid)/")
         
-//        if let password = password {
-//            userURLRef.updateChildValues([PasswordKey:password])
-//        } else {
-//            print("nil")
-//        }
-//        
-//        if let email = email {
-//            userURLRef.updateChildValues([EmailKey:email])
-//        } else {
-//            print("nil")
-//        }
-        
+     
         if let name = name {
             userURLRef.updateChildValues([NameKey:name])
         } else {
@@ -160,19 +151,11 @@ class UserController {
     }
     
     
+    
     static func logoutCurrentUser() {
         
         FirebaseController.base.unauth()
         sharedController.currentUser = nil
         
     }
-    
-//    static func mockUsers() -> [User] {
-//        
-//        let user1 = User(id: "123", uid: "1234", name: "Leeroy Jenkins", email: "leeroy@jenkins.com", password: "password1")
-//        let user2 = User(id: "456", uid: "987", name: "Darth Vader", email: "vader@empire.gov", password: "darkside")
-//        
-//        return [user1, user2]
-//    }
-    
 }

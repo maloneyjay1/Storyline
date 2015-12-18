@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-//remove entry from story,
-//update story
+
 
 //needs function to append entry with most likes in likes array at end of 24 hour period, and delete the rest of the entries.
     //this function also needs tie breaker logic.
@@ -20,7 +19,6 @@ import UIKit
 class StoryController {
     
     private let StoryKey = "story"
-    
     static let sharedController = StoryController()
     
     var currentStory: Story! {
@@ -31,7 +29,7 @@ class StoryController {
                 return nil
             }
             
-            return Story(json: storyDictionary, uid: StoryController.sharedController.currentStory.uid)
+            return Story(json: storyDictionary, uid: StoryController.sharedController.currentStory.uid!)
         }
         set {
             
@@ -45,11 +43,6 @@ class StoryController {
         }
     }
     
-    static func orderUsers(users: [User]) -> [User] {
-        
-        // sorts posts chronologically using Firebase identifiers
-        return users.sort({$0.0.name > $0.1.name})
-    }
     
     static func usersForStory(uid: String, completion: (users: [User]?) -> Void) {
         
@@ -69,7 +62,7 @@ class StoryController {
 
     static func addStory(uid: String, entries: [[String:AnyObject]], storydateCreated: NSDate, storyPrompt: String, completion: (story:Story?) -> Void) {
         
-        var story = Story(entries: entries, dateCreated: NSDate(), uid: UserController.sharedController.currentUser.uid, storyPrompt: "")
+        var story = Story(entries: entries, dateCreated: NSDate(), uid: UserController.sharedController.currentUser.uid!, storyPrompt: "")
         
         story.save()
         completion(story: story)
@@ -95,6 +88,9 @@ class StoryController {
         
         completion(success: true)
     }
+    
+    
+    // NEED currentEntriesForStory
 
     
     static func fetchUsersForStory(story: Story, completion: (users: [User]?) -> Void) {
@@ -105,7 +101,7 @@ class StoryController {
         
         dispatch_group_enter(dispatchGroup)
         
-        usersForStory(StoryController.sharedController.currentStory.uid, completion: {
+        usersForStory(StoryController.sharedController.currentStory.uid!, completion: {
             (users) -> Void in
             
             if let users = users {
@@ -117,7 +113,7 @@ class StoryController {
         
         dispatch_group_enter(dispatchGroup)
         
-        usersForStory(story.uid, completion: { (users) -> Void in
+        usersForStory(story.uid!, completion: { (users) -> Void in
             
             if let users = users {
                 allUsers += users
@@ -132,6 +128,13 @@ class StoryController {
             
             completion(users: orderedUsers)
         }
+    }
+    
+    
+    static func orderUsers(users: [User]) -> [User] {
+        
+        // sorts posts chronologically using Firebase identifiers
+        return users.sort({$0.0.name > $0.1.name})
     }
     
 }

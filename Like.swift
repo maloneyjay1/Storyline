@@ -10,15 +10,15 @@ import Foundation
 
 struct Like: Equatable, FirebaseType {
     
-    private let UserKey = "username"
-    private let EntryKey = "entry"
-    private let NameKey = "name"
-    private let EntryIdentifierKey = "entryIdentifier"
-    private let UIDKey = "uid"
+    static let UserKey = "username"
+    static let EntryKey = "entry"
+    static let NameKey = "name"
+    static let EntryIdentifierKey = "entryIdentifier"
+    static let UIDKey = "uid"
     
     let name: String
     let entryIdentifier: String
-    var uid: String
+    var uid: String?
     
     init(name: String, entryIdentifier: String, uid: String) {
         
@@ -31,37 +31,31 @@ struct Like: Equatable, FirebaseType {
     
     var endpoint: String {
         
-        return "/posts/\(self.entryIdentifier)/likes/"
+        return "entries/\(self.entryIdentifier)/likes/"
+        //entryIdentifier is entry.eid
         
     }
     
     var jsonValue: [String: AnyObject] {
         
-        return [UserKey: self.name, EntryKey: self.entryIdentifier]
+        return [Like.UserKey: self.name, Like.EntryKey: self.entryIdentifier]
     }
     
-    init?(json: [String: AnyObject], uid: String) {
+    init?(json: [String: AnyObject], uid: String = "") {
         
-        guard let postIdentifier = json[EntryKey] as? String,
-            let name = json[UserKey] as? String else {
-                
-                self.uid = ""
-                self.entryIdentifier = ""
-                self.name = ""
-                
-                return nil
-        }
+        guard let entryIdentifier = json[Like.EntryKey] as? String,
+            let name = json[Like.UserKey] as? String,
+            let uid = json[Like.UIDKey] as? String else { return nil }
         
-        self.entryIdentifier = postIdentifier
-        self.name = name
-        self.uid = uid
+        self.init(name: name, entryIdentifier: entryIdentifier, uid: uid)
+
     }
     
     func dictionaryOfLike() -> [String:AnyObject] {
         
-        return [NameKey: self.name,
-            EntryIdentifierKey: self.entryIdentifier,
-            UIDKey: self.uid
+        return [Like.NameKey: self.name,
+            Like.EntryIdentifierKey: self.entryIdentifier,
+            Like.UIDKey: self.uid!
         ]
     }
 }
