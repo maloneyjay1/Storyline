@@ -44,12 +44,15 @@ struct Like: Equatable, FirebaseType {
     init?(json: [String: AnyObject], uid: String = "") {
         
         guard let entryIdentifier = json[Like.EntryKey] as? String,
+            
             let name = json[Like.UserKey] as? String,
             let uid = json[Like.UIDKey] as? String else { return nil }
         
         self.init(name: name, entryIdentifier: entryIdentifier, uid: uid)
 
     }
+    
+    
     
     func dictionaryOfLike() -> [String:AnyObject] {
         
@@ -59,6 +62,7 @@ struct Like: Equatable, FirebaseType {
         ]
     }
 }
+
 
 func ==(lhs: Like, rhs: Like) -> Bool {
     

@@ -50,7 +50,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4gH-fC-Mer">
+                            <textField opaque="NO" clipsSubviews="YES" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4gH-fC-Mer">
                                 <rect key="frame" x="57" y="271" width="206" height="30"/>
                                 <color key="backgroundColor" red="0.97326783459999999" green="0.96322608330000004" blue="0.92683030840000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -87,7 +87,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.59999999999999998" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="JPr-Db-lbj">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.59999999999999998" contentMode="scaleToFill" misplaced="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="JPr-Db-lbj">
                                 <rect key="frame" x="36" y="99" width="248" height="137"/>
                                 <color key="backgroundColor" red="0.99596259590624747" green="0.99318363723421765" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" red="0.019607843829999999" green="0.011764707040000001" blue="0.011764707040000001" alpha="1" colorSpace="deviceRGB"/>
@@ -102,7 +102,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textView>
-                            <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="font1" translatesAutoresizingMaskIntoConstraints="NO" id="1xD-9Z-o16">
+                            <imageView userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="font1" translatesAutoresizingMaskIntoConstraints="NO" id="1xD-9Z-o16">
                                 <rect key="frame" x="36" y="113" width="248" height="111"/>
                                 <color key="tintColor" red="0.79600694444444442" green="0.78779409339091944" blue="0.75802706673623188" alpha="0.0" colorSpace="calibratedRGB"/>
                             </imageView>
@@ -260,7 +260,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Vy-vV-q53" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="274" y="471"/>
+            <point key="canvasLocation" x="275" y="471"/>
         </scene>
         <!--Account-->
         <scene sceneID="gdC-Sr-hFu">

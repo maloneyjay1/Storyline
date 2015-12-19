@@ -6,80 +6,97 @@
 //  Copyright © 2015 Jay Maloney. All rights reserved.
 
 
+//removed entries as story prop, will link in fire base as story parent childByAppendingPath with relevant eid
 import Foundation
+import UIKit
 
 struct Story: Equatable, FirebaseType {
-
+    
     private let URLKey = "url"
     private let IDKey = "id"
-    private let EntriesKey = "entries"
     private let DateCreatedKey = "dateCreated"
     private let StoryPromptKey = "storyPrompt"
+    private let SIDKey = "sid"
     private let UIDKey = "uid"
     
-    var entries: [[String:AnyObject]]
+    let uid: String?
     let dateCreated: NSDate
-    var uid: String?
+    let sid: String?
     var storyPrompt: String
     
-    init(entries: [[String:AnyObject]], dateCreated: NSDate, uid: String, storyPrompt: String) {
-    
-        self.entries = entries
+    init(uid: String, dateCreated: NSDate, sid: String, storyPrompt: String) {
+        
         self.dateCreated = dateCreated
+        self.sid = sid
         self.uid = uid
         self.storyPrompt = storyPrompt
         
     }
+    
     
     //MARK: FirebaseType
     
     var endpoint: String = "story"
     
     var jsonValue: [String: AnyObject] {
-        let dateCreatedString = String(dateCreated)
-        let json: [String: AnyObject] = [DateCreatedKey:dateCreatedString, UIDKey:uid!, EntriesKey: entries, StoryPromptKey: storyPrompt]
-                return json
+        
+        let json: [String: AnyObject] = [DateCreatedKey:self.dateCreated, UIDKey: self.uid!, SIDKey:self.sid!, StoryPromptKey: self.storyPrompt]
+        
+        return json
     }
     
     init?(json: [String: AnyObject], uid: String) {
         
-        guard let uid = json[UIDKey] as? String else {
+        guard let dateCreatedString = json[DateCreatedKey] as? String,
+            let sid = json[SIDKey] as? String,
+            let uid = json[UIDKey] as? String,
+            let storyPrompt = json[StoryPromptKey] as? String
             
-            self.uid = ""
-
-            return nil
+            else {
+                
+                self.dateCreated = NSDate()
+                self.sid = ""
+                self.uid = UserController.sharedController.currentUser.uid
+                self.storyPrompt = ""
+                
+                return nil
+                
         }
         
-        if let entries = json[EntriesKey] as? [[String:AnyObject]] {
-            self.entries = entries
-        } else{
-            print("ERROR no [String] in json[EntriesKey]")
-        }
-        
-        if let dateAsString = json[DateCreatedKey] as? String {
-            
-            let dateFormatter = NSDateFormatter()
-            let date = dateFormatter.dateFromString(dateAsString)
-            if let nsDate = date {
-                self.dateCreated = nsDate
-            }
-        }
-        
-        if let storyPrompt = json[StoryPromptKey] as? String {
-            
-            self.storyPrompt = storyPrompt
-            return nil
-        }
-        
+        self.storyPrompt = storyPrompt
+        //        self.entries = []
+        self.sid = sid
         self.uid = uid
-        return nil
-
+        self.dateCreated = NSDate()
+        let dateFormatter = NSDateFormatter()
+        let date = dateFormatter.dateFromString(dateCreatedString)
+        if let nsDate = date {
+            self.dateCreated = nsDate
+        }
+    }
+    
+    mutating func dictionaryOfStory() -> [String:AnyObject] {
+        
+        let date = NSDate()
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "hh:mm"
+        let dateString = dateFormatter.stringFromDate(date)
+        return [StoryPromptKey: self.storyPrompt,
+            //            EntriesKey: self.entries,
+            UIDKey: self.uid!,
+            SIDKey: self.sid!,
+            DateCreatedKey: dateString,
+            
+        ]
     }
 }
 
+
 func ==(lhs:Story, rhs:Story) -> Bool {
     
-    return (lhs.uid == rhs.uid)
+    return (lhs.sid == rhs.sid)
+    
 }
+
 
 

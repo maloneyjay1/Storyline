@@ -40,7 +40,8 @@ class EntryController {
     }
     
     
-    //successful
+    
+
     static func createEntry(uid:String = UserController.sharedController.currentUser.uid!, name: String = UserController.sharedController.currentUser.name!, text: String?, dateCreated: NSDate, completion: (success: Bool, dateCreated: NSDate, eid: String, newEntry: Entry) -> Void) {
         
         
@@ -66,7 +67,7 @@ class EntryController {
     
     
     
-    //testing
+
     static func entryFromIdentifier(user: User, uid: String, completion: (entry: Entry?) -> Void)
         
     {
@@ -82,8 +83,8 @@ class EntryController {
         }
     }
     
+
     
-    //successful
     static func fetchEntriesForUser(user: User, completion: (entries: [Entry]?) -> Void) {
         
         var allEntries: [Entry] = []
@@ -99,8 +100,9 @@ class EntryController {
         })
     }
     
-    //FOLLOW THIS FORMAT TO FIND USERS FOR LIKED ENTRIES
-    //successful
+
+    
+
     static func entriesForUser(uid: String?, completion: (entries: [Entry]?) -> Void) {
         
         let currentUserUID = UserController.sharedController.currentUser.uid
@@ -125,10 +127,8 @@ class EntryController {
     
     
     static func likesForEntry(entry:Entry, completion: (success:Bool) -> Void) {
-       
         
         let eid = entry.eid
-        
         FirebaseController.base.childByAppendingPath("likes").childByAppendingPath(eid).observeSingleEventOfType(.Value, withBlock: { snapshot in
             
             var likeArray = [[String: AnyObject]]()
@@ -139,20 +139,14 @@ class EntryController {
                 likeDictionaries.forEach({ (likeDictionary) -> () in
                     
                     let likeJson = likeDictionary.1
-                    
-                    //                    likeJson.forEach({ (dict) -> () in
-                    
                     likeArray.append(likeJson)
-                    //                    })
-                    
                 })
                 
                 let likeCount = likeArray.count
                 print("\(likeCount)")
-                
-                //count array
+
                 completion(success: true)
-                
+    
             } else {
                 
                 print("Error finding likes for \(eid)")
@@ -160,7 +154,7 @@ class EntryController {
             }
         })
     }
-    
+
     
     
     static func userForLikedEntry(entry:Entry, completion: (success: Bool) -> Void) {
@@ -190,21 +184,48 @@ class EntryController {
     
     
     
+    static func entryOfTheDay(entry:Entry, completion: (highest: String) -> Void) {
+        
+        FirebaseController.base.childByAppendingPath("likes").observeSingleEventOfType(.Value, withBlock: { snapshot in
+            if let likes = snapshot.value as? [String:AnyObject] {
+                
+                var highestEntryId = ""
+                var highestCount = -1
+                
+                var likeCountDictionary = [String : Int]()
+                
+                for (entryId, dictionaryOfLikesOfEntry) in likes {
+                    
+                    likeCountDictionary[entryId] = dictionaryOfLikesOfEntry.allKeys.count
+                    
+                    if dictionaryOfLikesOfEntry.allKeys.count > highestCount {
+                        
+                        highestEntryId = entryId
+                        highestCount = dictionaryOfLikesOfEntry.allKeys.count
+                    }
+                }
+                
+                print(likeCountDictionary)
+                completion(highest: highestEntryId)
+
+            }
+        })
+    }
     
-    //SUCCESS
+    
+
+    
     static func addLikeToEntry(entry: Entry, completion: (success: Bool) -> Void) {
         
         if let entryIdentifier = entry.eid {
             
-            //            let endPoint = FirebaseController.base.childByAppendingPath("entries/\(entryIdentifier)/likes/")
             let endPoint = FirebaseController.base.childByAppendingPath("likes").childByAppendingPath(entryIdentifier)
             
             let newLikeRef = endPoint.childByAutoId()
             
             let like = Like(name: UserController.sharedController.currentUser.name!, entryIdentifier: entryIdentifier, uid: UserController.sharedController.currentUser.uid!)
-            let likeJson = like.dictionaryOfLike()
             
-            //            let likeDictionaryExample = [UserController.sharedController.currentUser.uid!: true]
+            let likeJson = like.dictionaryOfLike()
             
             newLikeRef.updateChildValues(likeJson, withCompletionBlock: { (error, Firebase) -> Void in
                 if let error = error {
@@ -216,16 +237,13 @@ class EntryController {
             })
             
         } else {
-            
             print("No EID!")
         }
-        
     }
     
     
     
     
-    //test
     static func deleteLike(like: Like, completion: (success: Bool) -> Void) {
         
         like.delete()

@@ -21,7 +21,7 @@ class StoryViewController: UIViewController {
         //                    }
         //                }
         
-//        
+        
 //        UserController.authenticateUser("vader@empire.gov", password: "obihater101") { (success, user) -> Void in
 //            if success {
 //                print("\(user) authenticated.")
@@ -44,7 +44,7 @@ class StoryViewController: UIViewController {
 //                    }
 //                }
 
-        
+
         
 //        var myEntries:[Entry] = []
 //        EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
@@ -54,7 +54,7 @@ class StoryViewController: UIViewController {
 //                myEntries = entries
 //                print("\(myEntries)")
 //                
-//                let myEntry = myEntries[0]
+//                let myEntry = myEntries[1]
 //                
 //                EntryController.addLikeToEntry(myEntry) { (success) -> Void in
 //                    
@@ -69,7 +69,7 @@ class StoryViewController: UIViewController {
 //                print("Error fetching entries for user.")
 //            }
 //        }
-//        
+        
 
         
 //        //TESTING likesForEntry
@@ -108,38 +108,60 @@ class StoryViewController: UIViewController {
         
         
         
-        
-                //TESTING userForLikedEntry
-                var myEntries:[Entry] = []
-                EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
-                    if let entries = entries {
-        
-                        myEntries = entries
-        
-                        let myEntry = myEntries[0]
-        //
-        //                    let myLikesForEntry:[Entry] = []
-        
-                            EntryController.userForLikedEntry(myEntry, completion: { (success) -> Void in
-                                
-                                if success {
-                                    
-                                    print("success")
-                                    
-                                } else {
-                                    print("Failure finding user for liked Entry.")
-                                }
-                            })
-                        
+        var myEntries:[Entry] = []
+        EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
+            if let entries = entries {
+                
+                myEntries = entries
+                
+                let myEntry = myEntries[0]
+                
+                EntryController.entryOfTheDay(myEntry, completion: { (success) -> Void in
+                    if success {
+                        print("success")
                         
                     } else {
-                        print("Error fetching entries for user.")
+                        print("Failure finding user for liked Entry.")
                     }
-                }
+                })
+            } else {
+                print("Error fetching entries for user.")
+            }
+        }
+
+        
+        
         
         
 
+//                var myEntries:[Entry] = []
+//                EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
+//                    if let entries = entries {
+//        
+//                        myEntries = entries
+//        
+//                        let myEntry = myEntries[0]
+//        
+////                            let myLikesForEntry:[Entry] = []
+//        
+//                            EntryController.userForLikedEntry(myEntry, completion: { (success) -> Void in
+//                                
+//                                if success {
+//                                    
+//                                    print("success")
+//                                    
+//                                } else {
+//                                    print("Failure finding user for liked Entry.")
+//                                }
+//                            })
+//                        
+//                    } else {
+//                        print("Error fetching entries for user.")
+//                    }
+//                }
         
+        
+
         
         
 //                                EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in

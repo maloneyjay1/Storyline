@@ -44,6 +44,40 @@ class StoryController {
     }
     
     
+    var entries: [[String:AnyObject]]
+    
+
+    var storyPrompt: String
+    
+    static func createStory(uid:String = UserController.sharedController.currentUser.uid!, dateCreated: NSDate, entries: [[String:AnyObject]], storyPrompt: String, completion: (success: Bool, dateCreated: NSDate, sid: String)
+    
+    
+    
+    //    //successful
+    //    static func createEntry(uid:String = UserController.sharedController.currentUser.uid!, name: String = UserController.sharedController.currentUser.name!, text: String?, dateCreated: NSDate, completion: (success: Bool, dateCreated: NSDate, eid: String, newEntry: Entry) -> Void) {
+    //
+    //
+    //        let allEntriesRef = FirebaseController.base.childByAppendingPath("entries")
+    //
+    //        let newEntryRef = allEntriesRef.childByAutoId()
+    //        let eid = newEntryRef.key
+    //
+    //        var newEntry = Entry(uid: UserController.sharedController.currentUser.uid!, eid: eid, name: name, text: text, dateCreated: dateCreated)
+    //        let entryJson = newEntry.dictionaryOfEntry()
+    //
+    //        newEntryRef.setValue(entryJson, withCompletionBlock: { (error, Firebase) -> Void in
+    //
+    //            if error != nil {
+    //                print(error)
+    //            } else {
+    //                print(Firebase)
+    //            }
+    //        })
+    //
+    //        completion(success: true, dateCreated: dateCreated, eid: eid, newEntry: newEntry)
+    //    }
+    
+    
     static func usersForStory(uid: String, completion: (users: [User]?) -> Void) {
         
         FirebaseController.base.childByAppendingPath("users").queryOrderedByChild("uid").queryEqualToValue(uid).observeSingleEventOfType(.Value, withBlock: { snapshot in
