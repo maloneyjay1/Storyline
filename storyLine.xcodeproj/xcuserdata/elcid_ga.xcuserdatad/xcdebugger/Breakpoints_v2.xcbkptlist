@@ -19,14 +19,62 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "StoryViewController.swift"
-            timestampString = "472170370.228654"
+            filePath = "StoryController.swift"
+            timestampString = "472508673.03429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "createStory(_:dateCreated:storyPrompt:completion:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StoryViewController.swift"
+            timestampString = "472510839.747014"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "storyLine.StoryViewController.viewDidLoad (storyLine.StoryViewController)() -&gt; ()"
+                  moduleName = "storyLine"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elcid_ga/Desktop/storyLine/StoryViewController.swift"
+                  timestampString = "472510861.77844"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "50"
+                  endingLineNumber = "50"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "storyLine.StoryViewController.(viewDidLoad (storyLine.StoryViewController) -&gt; () -&gt; ()).(closure #1)"
+                  moduleName = "storyLine"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/elcid_ga/Desktop/storyLine/StoryViewController.swift"
+                  timestampString = "472510861.778762"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "689">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

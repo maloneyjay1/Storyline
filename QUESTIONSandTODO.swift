@@ -2,13 +2,13 @@
 
 PRIORITY!
 
-createStory,
-    *creates new endpoint of "story" with childbyappendingpath of entry.eid's for reference to story entries.  creates very first entry, which is the story lead.
 
 appendEntryToStory,
-    *creates new entry.eid as child of story, for reference to story entry.
+    *creates new entry.eid as child of story, for reference to entry dictionary content.
 
 userForStoryEntry,
+    *return user for entry in story
+        *do I need this?  just use regular userForEntry in context of story entries array?
 
 appendWinningEntryToStory,
     *using previous eid, append entry dictionary to story object.
@@ -20,13 +20,12 @@ appendWinningEntryToStory,
 
 
 1. deleteLikeAtEntry *
-2. createStory **
-3. updateStory *
-4. appendEntrytoStory ***
-5. deleteEntryInStory *
-6. saveEntryInStory *
-7. userForStoryEntry ***  This func returns the value at user key, in current Story entries
-8. appendWinningEntryToStory ***  This func appends EOD to current Story array
+2. updateStory *
+3. appendEntrytoStory ***
+4. deleteEntryInStory *
+5. saveEntryInStory *
+6. userForStoryEntry ***  This func returns the value at user key, in current Story entries
+7. appendWinningEntryToStory ***  This func appends EOD to current Story array
 
 
 

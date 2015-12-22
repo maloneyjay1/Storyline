@@ -35,7 +35,7 @@ class StoryViewController: UIViewController {
 //        
 //                    if let name = UserController.sharedController.currentUser.name {
 //        
-//                        if success == true {
+//                        if success {
 //        
 //                            print("\(eid) created successfully!  Thank you \(name) for your entry, Entry:\(eid) created at \(dateCreated)")
 //                        } else {
@@ -43,9 +43,26 @@ class StoryViewController: UIViewController {
 //                        }
 //                    }
 //                }
-
-
         
+        
+
+        //TEST CREATE STORY WITH SAMPLE PROMPT
+        StoryController.createStory(UserController.sharedController.currentUser.uid!, dateCreated: NSDate(), storyPrompt: "Once upon a time:") { (success, newStory, dateCreated, sid) -> Void in
+            
+            if let uid = UserController.sharedController.currentUser.uid {
+                if success {
+                    print("\(newStory): \(sid) created successfully by user \(uid) at \(dateCreated)")
+                } else {
+                    print("Sorry, try again.")
+                }
+            }
+        }
+        
+        
+        
+        
+
+//        
 //        var myEntries:[Entry] = []
 //        EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
 //            if let entries = entries {
@@ -64,14 +81,14 @@ class StoryViewController: UIViewController {
 //                        print("Error adding Like to Entry.")
 //                    }
 //                }
-//        
+//                
 //            } else {
 //                print("Error fetching entries for user.")
 //            }
 //        }
         
 
-        
+//        
 //        //TESTING likesForEntry
 //        var myEntries:[Entry] = []
 //        EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
@@ -107,33 +124,33 @@ class StoryViewController: UIViewController {
 //        }
         
         
-        
-        var myEntries:[Entry] = []
-        EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
-            if let entries = entries {
-                
-                myEntries = entries
-                
-                let myEntry = myEntries[0]
-                
-                EntryController.entryOfTheDay(myEntry, completion: { (success) -> Void in
-                    if success {
-                        print("success")
-                        
-                    } else {
-                        print("Failure finding user for liked Entry.")
-                    }
-                })
-            } else {
-                print("Error fetching entries for user.")
-            }
-        }
+//        
+//        var myEntries:[Entry] = []
+//        EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
+//            if let entries = entries {
+//                
+//                myEntries = entries
+//                
+//                let myEntry = myEntries[0]
+//                
+//                EntryController.entryOfTheDay(myEntry, completion: { (highest) -> Void in
+//                    if (highest != nil) {
+//                        print("success")
+//                        
+//                    } else {
+//                        print("Failure finding user for liked Entry.")
+//                    }
+//                })
+//            } else {
+//                print("Error fetching entries for user.")
+//            }
+//        }
 
         
         
         
         
-
+//
 //                var myEntries:[Entry] = []
 //                EntryController.fetchEntriesForUser(UserController.sharedController.currentUser) { (entries) -> Void in
 //                    if let entries = entries {
@@ -159,7 +176,7 @@ class StoryViewController: UIViewController {
 //                        print("Error fetching entries for user.")
 //                    }
 //                }
-        
+//        
         
 
         
@@ -169,16 +186,16 @@ class StoryViewController: UIViewController {
 //                                        print(entries)
 //                                    }
 //                                }
-        
-        
-        //        EntryController.entriesForUser(UserController.sharedController.currentUser.uid) { (entries) -> Void in
-        //            if let entries = entries {
-        //                print("\(entries)")
-        //            }
-        //        }
-        //
-        //
-        
+//        
+//
+//                EntryController.entriesForUser(UserController.sharedController.currentUser.uid) { (entries) -> Void in
+//                    if let entries = entries {
+//                        print("\(entries)")
+//                    }
+//                }
+//        
+//        
+//        
         
         
         

@@ -39,8 +39,7 @@ class EntryController {
         }
     }
     
-    
-    
+//    var entries = [Entry]()
 
     static func createEntry(uid:String = UserController.sharedController.currentUser.uid!, name: String = UserController.sharedController.currentUser.name!, text: String?, dateCreated: NSDate, completion: (success: Bool, dateCreated: NSDate, eid: String, newEntry: Entry) -> Void) {
         
@@ -184,12 +183,13 @@ class EntryController {
     
     
     
-    static func entryOfTheDay(entry:Entry, completion: (highest: String) -> Void) {
+    static func entryOfTheDay(entry:Entry, completion: (highest: String?) -> Void) {
         
         FirebaseController.base.childByAppendingPath("likes").observeSingleEventOfType(.Value, withBlock: { snapshot in
             if let likes = snapshot.value as? [String:AnyObject] {
                 
                 var highestEntryId = ""
+                
                 var highestCount = -1
                 
                 var likeCountDictionary = [String : Int]()
@@ -207,7 +207,6 @@ class EntryController {
                 
                 print(likeCountDictionary)
                 completion(highest: highestEntryId)
-
             }
         })
     }
@@ -251,22 +250,21 @@ class EntryController {
     }
     
     
+//    static func appendEntryToMainStory(var entry:Entry, completion: (entry: Entry?) -> Void) {
+//        
+//    
+//        EntryController.sharedController.userEntry.entries.append(entry.dictionaryOfEntry())
+//        EntryController.sharedController.userEntry.save()
+//        completion(entry:entry)
+//        
+//    }
     
-    
-    static func appendEntryToMainStory(var entry:Entry, completion: (entry: Entry?) -> Void) {
-        
-        
-        StoryController.sharedController.currentStory.entries.append(entry.dictionaryOfEntry())
-        StoryController.sharedController.currentStory.save()
-        completion(entry:entry)
-        
-    }
     
     
     static func removeEntryFromMainStory(entry:Entry, completion: (success: Bool) -> Void) {
         
         entry.delete()
-        StoryController.sharedController.currentStory.save()
+        EntryController.sharedController.userEntry.save()
         completion(success: true)
         
     }

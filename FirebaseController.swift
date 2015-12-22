@@ -44,7 +44,7 @@ class FirebaseController {
 
 protocol FirebaseType {
     
-    var uid: String? { get set }
+    var uid: String? { get }
     var endpoint: String { get }
     var jsonValue: [String: AnyObject] { get }
     
@@ -76,7 +76,7 @@ extension FirebaseType {
             endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAppendingPath(childID)
         } else {
             endpointBase = FirebaseController.base.childByAppendingPath(endpoint).childByAutoId()
-            self.uid = endpointBase.key
+//            self.uid = endpointBase.key
         }
         
         endpointBase.updateChildValues(self.jsonValue)

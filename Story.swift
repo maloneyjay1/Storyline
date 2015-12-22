@@ -12,25 +12,23 @@ import UIKit
 
 struct Story: Equatable, FirebaseType {
     
+    private let UIDKey = "uid"
     private let URLKey = "url"
     private let IDKey = "id"
     private let DateCreatedKey = "dateCreated"
     private let StoryPromptKey = "storyPrompt"
     private let SIDKey = "sid"
-    private let UIDKey = "uid"
     
     let uid: String?
-    let dateCreated: NSDate
+    var dateCreated: NSDate
     let sid: String?
     var storyPrompt: String
     
     init(uid: String, dateCreated: NSDate, sid: String, storyPrompt: String) {
-        
         self.dateCreated = dateCreated
         self.sid = sid
         self.uid = uid
         self.storyPrompt = storyPrompt
-        
     }
     
     
@@ -54,9 +52,9 @@ struct Story: Equatable, FirebaseType {
             
             else {
                 
+                self.uid = UserController.sharedController.currentUser.uid
                 self.dateCreated = NSDate()
                 self.sid = ""
-                self.uid = UserController.sharedController.currentUser.uid
                 self.storyPrompt = ""
                 
                 return nil
@@ -64,7 +62,6 @@ struct Story: Equatable, FirebaseType {
         }
         
         self.storyPrompt = storyPrompt
-        //        self.entries = []
         self.sid = sid
         self.uid = uid
         self.dateCreated = NSDate()

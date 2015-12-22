@@ -16,20 +16,20 @@ struct User: Equatable, FirebaseType {
     private let PasswordKey = "password"
     private let URLKey = "url"
     private let EntriesKey = "entries"
-
+    
     let name: String?
     var email: String?
     var password: String?
     var uid: String?
-//    var entries: [String]
+    //    var entries: [String]
     
     init(uid: String, name: String? = nil, email: String? = nil, password: String? = nil) {
-    
+        
         self.name = name
         self.email = email
         self.password = password
         self.uid = uid
-//        self.entries = entries
+        //        self.entries = entries
         
     }
     
@@ -42,28 +42,28 @@ struct User: Equatable, FirebaseType {
         return json
     }
     
-//    var jsonValue: [String: AnyObject] {
-//        
-//        var json: [String: AnyObject] = [:]
-//        
-//        if let name = self.name {
-//            json.updateValue(name, forKey: NameKey)
-//        }
-//        
-//        if let email = self.email {
-//            json.updateValue(email, forKey: EmailKey)
-//        }
-//        
-//        if let password = self.password {
-//            json.updateValue(password, forKey: PasswordKey)
-//        }
-//        
-//        if let entries = self.entries {
-//            json.updateValue(entries, forKey: EntriesKey)
-//        }
-//        
-//        return json
-//    }
+    //    var jsonValue: [String: AnyObject] {
+    //
+    //        var json: [String: AnyObject] = [:]
+    //
+    //        if let name = self.name {
+    //            json.updateValue(name, forKey: NameKey)
+    //        }
+    //
+    //        if let email = self.email {
+    //            json.updateValue(email, forKey: EmailKey)
+    //        }
+    //
+    //        if let password = self.password {
+    //            json.updateValue(password, forKey: PasswordKey)
+    //        }
+    //
+    //        if let entries = self.entries {
+    //            json.updateValue(entries, forKey: EntriesKey)
+    //        }
+    //
+    //        return json
+    //    }
     
     init?(json: [String: AnyObject], uid: String) {
         
@@ -78,8 +78,8 @@ struct User: Equatable, FirebaseType {
         self.password = json[PasswordKey] as? String
         self.uid = uid
         //self.image = json[imageKey] as? String
-
-       
+        
+        
     }
     
     func dictionaryOfUser() -> [String:AnyObject] {
@@ -88,7 +88,7 @@ struct User: Equatable, FirebaseType {
             EmailKey: self.email!,
             PasswordKey: self.password!,
             UIDKey: self.uid!,
-
+            
         ]
     }
 }

@@ -11,31 +11,24 @@ import UIKit
 
 struct Entry: Equatable, FirebaseType {
     
-    //CHANGE POSTEDINMAIN TO STRING OPTIONAL
-    
     private let URLKey = "url"
     private let TextKey = "text"
     private let DateCreatedKey = "dateCreated"
     private let PostedInMainKey = "postedInMain"
-    //    private let likesKey = "likes"
     private let nameKey = "name"
     private let UIDKey = "uid"
     private let EIDKey = "eid"
     
     let text: String
-    //    var likes: [String]
     var dateCreated: NSDate
     let name: String
     var uid: String?
     let eid: String?
     
-    
-    
-    //complete eid stuff
+
     init(uid: String, eid: String, name: String = UserController.sharedController.currentUser.name!, text: String? = nil, dateCreated: NSDate) {
         
         self.text = text!
-        //        self.likes = likes
         self.dateCreated = dateCreated
         self.uid = uid
         self.name = name

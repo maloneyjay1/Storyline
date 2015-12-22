@@ -136,8 +136,8 @@
 			children = (
 				E652EB841C1FDB980040D171 /* QUESTIONSandTODO.swift */,
 				E62B2F501BFE94E000C81B9C /* FirebaseController.swift */,
-				E62B2F651C0653FB00C81B9C /* EntryController.swift */,
 				E62B2F631C051E0300C81B9C /* UserController.swift */,
+				E62B2F651C0653FB00C81B9C /* EntryController.swift */,
 				E62B2F671C06540B00C81B9C /* StoryController.swift */,
 			);
 			name = Controllers;
