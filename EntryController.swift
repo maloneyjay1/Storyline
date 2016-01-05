@@ -39,10 +39,9 @@ class EntryController {
         }
     }
     
-//    var entries = [Entry]()
-
+    //    var entries = [Entry]()
+    
     static func createEntry(uid:String = UserController.sharedController.currentUser.uid!, name: String = UserController.sharedController.currentUser.name!, text: String?, dateCreated: NSDate, completion: (success: Bool, dateCreated: NSDate, eid: String, newEntry: Entry) -> Void) {
-        
         
         let allEntriesRef = FirebaseController.base.childByAppendingPath("entries")
         
@@ -66,7 +65,7 @@ class EntryController {
     
     
     
-
+    
     static func entryFromIdentifier(user: User, uid: String, completion: (entry: Entry?) -> Void)
         
     {
@@ -82,7 +81,7 @@ class EntryController {
         }
     }
     
-
+    
     
     static func fetchEntriesForUser(user: User, completion: (entries: [Entry]?) -> Void) {
         
@@ -99,9 +98,9 @@ class EntryController {
         })
     }
     
-
     
-
+    
+    
     static func entriesForUser(uid: String?, completion: (entries: [Entry]?) -> Void) {
         
         let currentUserUID = UserController.sharedController.currentUser.uid
@@ -125,6 +124,70 @@ class EntryController {
     
     
     
+    
+    static func returnCurrentStories(completion: (stories: [Story]?) -> Void) {
+        
+        //        let storyEnd = "\(FirebaseController.base.childByAppendingPath("stories"))"
+        
+        FirebaseController.base.childByAppendingPath("stories").observeSingleEventOfType(.Value, withBlock: {
+            snapshot in
+            
+            if let storyDictionaries = snapshot.value as? [String:AnyObject] {
+                
+                let stories = storyDictionaries.flatMap({Story(json: $0.1 as! [String:AnyObject], uid: (UserController.sharedController.currentUser?.uid)! ) } )
+                
+                completion(stories: stories)
+            }
+            
+        })
+    }
+    
+    
+    
+    static func fetchStories(completion: (stories:[Story]?) -> Void) {
+        
+        var allStories: [Story] = []
+        
+        returnCurrentStories { (stories) -> Void in
+            
+            if let stories = stories {
+                allStories = stories
+                print("ALL STORIES COUNT: \(allStories.count)")
+                completion(stories: allStories)
+            }
+        }
+    }
+    
+    
+    
+    
+    //    static func returnCurrentStories(completion: (success:Bool) -> Void) {
+    //
+    //        FirebaseController.base.childByAppendingPath("stories").observeSingleEventOfType(.Value, withBlock: { snapshot in
+    //
+    //            var storyArray = [[String:AnyObject]]()
+    //
+    //            if let storyDictionaries = snapshot.value as? [String: [String : AnyObject]] {
+    //                storyDictionaries.forEach({ (storyDictionary) -> () in
+    //
+    //                    let storyJson = storyDictionary.1
+    //                    storyArray.append(storyJson)
+    //                })
+    //
+    //                let storyCount = storyArray.count
+    //                print("\(storyCount)")
+    //
+    //                completion(success: true)
+    //            } else {
+    //
+    //                print("Error finding stories.")
+    //                completion(success:false)
+    //            }
+    //        })
+    //    }
+    
+    
+    
     static func likesForEntry(entry:Entry, completion: (success:Bool) -> Void) {
         
         let eid = entry.eid
@@ -143,9 +206,9 @@ class EntryController {
                 
                 let likeCount = likeArray.count
                 print("\(likeCount)")
-
+                
                 completion(success: true)
-    
+                
             } else {
                 
                 print("Error finding likes for \(eid)")
@@ -153,7 +216,7 @@ class EntryController {
             }
         })
     }
-
+    
     
     
     static func userForLikedEntry(entry:Entry, completion: (success: Bool) -> Void) {
@@ -212,7 +275,41 @@ class EntryController {
     }
     
     
-
+    
+    
+    static  func addEntryToStory(var entry: Entry, story: Story, completion: (success: Bool) -> Void) {
+        
+        if let entryIdentifier = entry.eid {
+            
+            if let storyIdentifier = story.sid {
+                
+                let endPoint = FirebaseController.base.childByAppendingPath("stories").childByAppendingPath(storyIdentifier)
+                
+                let newStoryEntryRef = endPoint.childByAppendingPath(entryIdentifier)
+                
+                let entryJson = entry.dictionaryOfEntry()
+                
+                newStoryEntryRef.updateChildValues(entryJson, withCompletionBlock: { (error, Firebase) -> Void in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        completion(success: false)
+                    } else {
+                        completion(success: true)
+                        print("Entry added to story.")
+                    }
+                })
+                
+            } else {
+                print("No SID!")
+            }
+            
+        } else {
+            print("No EID!")
+        }
+        
+    }
+    
+    
     
     static func addLikeToEntry(entry: Entry, completion: (success: Bool) -> Void) {
         
@@ -250,14 +347,14 @@ class EntryController {
     }
     
     
-//    static func appendEntryToMainStory(var entry:Entry, completion: (entry: Entry?) -> Void) {
-//        
-//    
-//        EntryController.sharedController.userEntry.entries.append(entry.dictionaryOfEntry())
-//        EntryController.sharedController.userEntry.save()
-//        completion(entry:entry)
-//        
-//    }
+    //    static func appendEntryToMainStory(var entry:Entry, completion: (entry: Entry?) -> Void) {
+    //
+    //
+    //        EntryController.sharedController.userEntry.entries.append(entry.dictionaryOfEntry())
+    //        EntryController.sharedController.userEntry.save()
+    //        completion(entry:entry)
+    //
+    //    }
     
     
     
